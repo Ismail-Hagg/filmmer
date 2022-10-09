@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "437104823640",
+    "project_id": "web-projects-42e93",
+    "storage_bucket": "web-projects-42e93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437104823640:android:a85fdd217c232c679de92d",
+        "android_client_info": {
+          "package_name": "com.example.filmpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437104823640-opbar9mkj77lp243mjjis75fh7ve4325.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.filmpro",
+            "certificate_hash": "3f0f458378d86dd6fb80fdc54d285a4c2b19275d"
+          }
+        },
+        {
+          "client_id": "437104823640-hl6s3p2pd553aeqg5i4edf0nqgcc6t5o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnDlWvoMiVykUJSgIGASzA1aju6ycGTjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437104823640-hl6s3p2pd553aeqg5i4edf0nqgcc6t5o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "437104823640-3n9eclis0r8q4g5bo6g67h3ttt8htu1u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.filmmer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
