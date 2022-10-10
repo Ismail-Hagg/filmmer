@@ -14,6 +14,7 @@ class UserModel {
   final bool isDarkTheme;
   final bool isError;
   final String phoneNumber;
+  final isSocial;
 
   UserModel({
     required this.userName,
@@ -28,7 +29,8 @@ class UserModel {
     required this.language,
     required this.isDarkTheme,
     required this.isError,
-    required this.phoneNumber
+    required this.phoneNumber,
+    required this.isSocial
   });
 
   toMap() {
@@ -45,7 +47,8 @@ class UserModel {
       'language': language,
       'isDarkTheme': isDarkTheme,
       'isError': isError,
-      'phoneNumber' : phoneNumber
+      'phoneNumber' : phoneNumber,
+      'isSocial':isSocial
     };
   }
 
@@ -64,6 +67,7 @@ class UserModel {
       isDarkTheme: map['isDarkTheme'],
       isError: map['isError'],
       phoneNumber : map['phoneNumber'],
+      isSocial:map['isSocial'],
     );
   }
 }

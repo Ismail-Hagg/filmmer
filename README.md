@@ -1,16 +1,14 @@
-# filmpro
+# filmmer
 
-A new Flutter project.
+a movie app made using flutter and the movie database api (tmdb) and firebase in the backend.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- save movies and shows in a watchlist
+- keep track of shows you're watching 
+- get notifications of new episodes and new movie releases
+- get recommendations 
+- comment on movies and shows
+- see other people's watchlists
+- chatt with other people
+- light and dark themes

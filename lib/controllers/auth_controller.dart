@@ -26,19 +26,18 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     _user.bindStream(_auth.authStateChanges());
-    print(_user);
     update();
   }
 
 
     void googleSignInMethod() async {
-    // count.value = 1;
+    count.value = 1;
     try {
       final dynamic googleUser = await _googleSignIn.signIn() ?? '';
       if (googleUser == '') {
         snack('abort'.tr,'');
 
-        // count.value = 0;
+        count.value = 0;
       } else {
         GoogleSignInAuthentication authy = await googleUser!.authentication;
 
@@ -58,10 +57,10 @@ class AuthController extends GetxController {
       snack('Firebase Error', e.toString());
       print(e.toString());
 
-      // count.value = 0;
+      count.value = 0;
     } catch (e) {
       snack('Error', e.toString());
-      // count.value = 0;
+      count.value = 0;
     }
   }
 

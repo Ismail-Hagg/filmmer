@@ -17,6 +17,16 @@ class RoundButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration:  BoxDecoration(
+        boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 3,
+        blurRadius: 7,
+        offset:const Offset(0, 3), 
+      ),
+    ],
+      ),
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: width,
       child: ClipRRect(
@@ -25,7 +35,7 @@ class RoundButton extends StatelessWidget {
           onPressed: press,
           style: ElevatedButton.styleFrom(
               primary: Theme.of(context).colorScheme.secondary,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding:  EdgeInsets.symmetric( vertical: width*0.04),
               textStyle: TextStyle(
                 letterSpacing: 2,
                 color: textColor,

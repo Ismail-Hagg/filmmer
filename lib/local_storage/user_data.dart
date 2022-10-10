@@ -40,7 +40,8 @@ class UserData {
           userId: '',
           userName: '',
           isError: true,
-          phoneNumber: '');
+          phoneNumber: '',
+          isSocial: false);
     }
   }
   
