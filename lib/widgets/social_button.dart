@@ -36,14 +36,13 @@ class SocialButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
            primary: Theme.of(context).colorScheme.secondary,
-           padding:  EdgeInsets.symmetric( horizontal:width*0.03, )
-           //shadowColor: Colors.red
+           //padding:  EdgeInsets.symmetric( horizontal:width*0.03, )
               ),
           onPressed: press,
           child: Row(
             mainAxisAlignment:MainAxisAlignment.spaceEvenly,
                   children: [
-                    SvgPicture.asset('assets/images/google.svg',width:35,height:35),
+                    SvgPicture.asset('assets/images/google.svg',width:width*0.1,height:width*0.1),
                     CustomText(
                         text: text,
                         color: textColor,

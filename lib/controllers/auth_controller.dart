@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:filmpro/services/google_sign_in_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../helper/constants.dart';
@@ -18,6 +22,13 @@ class AuthController extends GetxController {
 
   RxInt get count => _count;
   RxBool get obcure => _obscure;
+
+  File _image=File('');
+  File get image => _image;
+  String _path = '';
+  String get path => _path;
+  bool _isPicked=false;
+  bool get isPicked => _isPicked;
 
 
 
@@ -82,6 +93,31 @@ class AuthController extends GetxController {
 
    obscureChange() {
     _obscure.value = !_obscure.value;
+  }
+
+  // select image from device
+  Future<void> openImagePicker() async {
+    if (_isPicked==true) {
+      _isPicked = false;
+      _image=File('');
+      _path='';
+      update();
+    } else {
+      final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg','jpeg']);
+ 
+    if (result == null) {
+      snack('abort'.tr,'');
+    } else {
+      _path = result.files.single.path.toString();
+      _image = File(_path.toString());
+      _isPicked=true;
+      update();
+      
+    }
+    }
   }
 
  

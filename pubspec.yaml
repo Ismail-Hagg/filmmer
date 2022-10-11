@@ -27,9 +27,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cached_network_image: ^3.0.0
+  cached_network_image: ^3.2.2
   cloud_firestore: ^3.5.1
   cupertino_icons: ^1.0.2
+  file_picker: ^5.2.1
   firebase_auth: ^3.11.2
   firebase_core: ^1.24.0
   flutter:
@@ -59,6 +60,7 @@ flutter:
   assets:
     - assets/images/google_logo.png
     - assets/images/google.svg
+    - assets/images/no_image.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

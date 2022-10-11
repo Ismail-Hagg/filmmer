@@ -14,7 +14,7 @@ class UserModel {
   final bool isDarkTheme;
   final bool isError;
   final String phoneNumber;
-  final isSocial;
+  final bool isSocial;
 
   UserModel({
     required this.userName,
