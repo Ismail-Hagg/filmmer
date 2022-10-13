@@ -19,7 +19,7 @@ class ControllerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(
       init: Get.find<AuthController>(),
-      builder: (controller) => controller.user == null ?  LoginPage() :const HomePage(),
+      builder: (controller) => controller.user == null ?  LoginPage() : HomePage(),
     );
   }
 }

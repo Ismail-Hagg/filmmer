@@ -1,27 +1,61 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_sign_in/google_sign_in.dart';
 
-import '../controllers/auth_controller.dart';
-
+import '../models/user_model.dart';
 
 class GoogleSignInService {
-  Future<void> getGender(Map<String, String> map) async {
+  Future<UserModel> googleLogIn(Map<String, String> headers,String uid,String token,String number) async {
+    UserModel model = UserModel(
+          birthday: {},
+          bio: '',
+          email: '',
+          gender: '',
+          isDarkTheme: false,
+          isError: true,
+          isPicLocal: false,
+          isSocial: false,
+          language: Get.deviceLocale.toString(),
+          localPicPath: '',
+          messagingToken: '',
+          onlinePicPath: '',
+          phoneNumber: '',
+          userId: '',
+          userName: '');
+    String host = 'https://people.googleapis.com';
+    String endPoint =
+        '/v1/people/me?personFields=birthdays,emailAddresses,genders,photos,names';
+
     try {
-      final r = await http.get(
-          Uri.parse(
-              "https://people.googleapis.com/v1/people/me/connections?personFields=phoneNumbers,metadata,birthdays,names,photos,emailAddresses,externalIds&sources=READ_SOURCE_TYPE_PROFILE&key=AIzaSyAyDxyT-TYFJiK3GE0ZLw1zi2pyyeVYIA0"),
-          headers: map);
-           final response = json.decode(r.body);
-    // print(response["genders"][0]["formattedValue"]);
-      print(response);
+      final requests =
+          await http.get(Uri.parse("$host$endPoint"), headers: headers);
+
+      if (requests.statusCode == 200) {
+        
+        model = UserModel(
+          birthday: (json.decode(requests.body)['birthdays'][0]['date']),
+          bio: '',
+          email: (json.decode(requests.body)['emailAddresses'][0]['value']),
+          gender: (json.decode(requests.body)['genders'][0]['value']),
+          isDarkTheme: true,
+          isError: false,
+          isPicLocal: false,
+          isSocial: true,
+          language: Get.deviceLocale.toString(),
+          localPicPath: '',
+          messagingToken: token,
+          onlinePicPath: (json.decode(requests.body)['photos'][0]['url']),
+          phoneNumber: number,
+          userId: uid,
+          userName: (json.decode(requests.body)['names'][0]['displayName']));
+          return model;
+      } else {
+        print('Failed');
+        return model;
+      } 
     } catch (e) {
-      print('failed');
+      print('error massage : '+e.toString());
+      return model;
     }
-    // final response = json.decode(r.body);
-    // print(response["genders"][0]["formattedValue"]);
-    // return response["genders"][0]["formattedValue"];
   }
 }

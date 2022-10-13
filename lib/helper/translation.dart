@@ -58,7 +58,16 @@ class Translation extends Translations {
           'wrong': 'Something Went Wrong',
           'abort': 'Canceled',
           'connect': 'Connection Problem',
-          'google':'Sign up with Google'
+          'google':'Sign up with Google',
+          'adduser':'Add A Username',
+          'firealready':'Email Already Used',
+          'firewrong':'Wrong email/password combination',
+          'fireuser':'No user found with this email',
+          'firedis':'User disabled',
+          'firetoo':'Too many requests to log into this account',
+          'fireserver':'Server error, please try again later',
+          'fireemail':'Email address is invalid',
+          'firelogin':'Login failed. Please try again'
         },
         'ar_SA': {
           'Year': 'السنه',
@@ -114,7 +123,16 @@ class Translation extends Translations {
           'wrong': 'هناك خلل',
           'abort': 'الغيت العمليه',
           'connect': 'مشكله في الاتصال',
-          'google':'الدخول باستعمال قوقل'
+          'google':'الدخول باستعمال قوقل',
+          'adduser':'قم باضافة اسم مستخدم',
+          'firealready':'هذا البريد مستخدم بالفعل',
+          'firewrong':'البريد او كلمة المرور خاطئ',
+          'fireuser':'لايوجد مستخدم بهذا البريد',
+          'firedis':'هذا المستخدم موقوف',
+          'firetoo':'معلومات كثيره',
+          'fireserver':'خطا في السيرفر حاول مره اخرى',
+          'fireemail':'البريد لايصلح',
+          'firelogin':'فشل في تسجيل الدخول حاول مره اخرى'
         }
       };
 }

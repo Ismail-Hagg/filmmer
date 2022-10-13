@@ -1,20 +1,22 @@
 // model of the user data that is going to be saved locally and in firebase
 
+
 class UserModel {
-  final String userName;
-  final String email;
-  final String gender;
-  final String onlinePicPath;
-  final String localPicPath;
-  final String userId;
-  final String bio;
-  final int age;
-  final bool isPicLocal;
-  final Map<String, String> language;
-  final bool isDarkTheme;
-  final bool isError;
-  final String phoneNumber;
-  final bool isSocial;
+   String userName;
+   String email;
+   String gender;
+   String onlinePicPath;
+   String localPicPath;
+   String userId;
+   String bio;
+   Map<String,dynamic> birthday;
+   bool isPicLocal;
+   String language;
+   bool isDarkTheme;
+   bool isError;
+   String phoneNumber;
+   bool isSocial;
+   String messagingToken;
 
   UserModel({
     required this.userName,
@@ -24,13 +26,14 @@ class UserModel {
     required this.localPicPath,
     required this.userId,
     required this.bio,
-    required this.age,
+    required this.birthday,
     required this.isPicLocal,
     required this.language,
     required this.isDarkTheme,
     required this.isError,
     required this.phoneNumber,
-    required this.isSocial
+    required this.isSocial,
+    required this.messagingToken
   });
 
   toMap() {
@@ -42,13 +45,14 @@ class UserModel {
       'localPicPath': localPicPath,
       'userId': userId,
       'bio': bio,
-      'age': age,
+      'age': birthday,
       'isPicLocal': isPicLocal,
       'language': language,
       'isDarkTheme': isDarkTheme,
       'isError': isError,
       'phoneNumber' : phoneNumber,
-      'isSocial':isSocial
+      'isSocial':isSocial,
+      'messagingToken':messagingToken
     };
   }
 
@@ -61,13 +65,14 @@ class UserModel {
       localPicPath: map['localPicPath'],
       userId: map['userId'],
       bio: map['bio'],
-      age: map['age'],
+      birthday: map['age'],
       isPicLocal: map['isPicLocal'],
       language: map['language'],
       isDarkTheme: map['isDarkTheme'],
       isError: map['isError'],
       phoneNumber : map['phoneNumber'],
       isSocial:map['isSocial'],
+      messagingToken : map['messagingToken'],
     );
   }
 }

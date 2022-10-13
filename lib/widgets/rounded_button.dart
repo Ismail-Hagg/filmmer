@@ -46,7 +46,7 @@ class RoundButton extends StatelessWidget {
           child: Obx(
             () => Get.find<AuthController>().count.value == 1
                 ?  CircularProgressIndicator(
-                    color:Theme.of(context).colorScheme.secondary,
+                    color:Theme.of(context).colorScheme.primary,
                   )
                 : CustomText(text: text, color: textColor, size: titleSize,),
           ),

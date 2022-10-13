@@ -36,7 +36,6 @@ class SocialButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
            primary: Theme.of(context).colorScheme.secondary,
-           //padding:  EdgeInsets.symmetric( horizontal:width*0.03, )
               ),
           onPressed: press,
           child: Row(
