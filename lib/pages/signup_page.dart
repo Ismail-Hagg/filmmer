@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:filmpro/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../helper/constants.dart';
 import '../widgets/circle_container.dart';
 import '../widgets/rounded_button.dart';
 import '../widgets/rounded_input.dart';
@@ -27,7 +29,7 @@ class SignUpPage extends StatelessWidget {
             children: [
               Container(
                 height: (height * 0.5),
-                color: Theme.of(context).colorScheme.secondary,
+                color: mainColor,
               ),
               Positioned(
                   bottom: 0,
@@ -60,19 +62,13 @@ class SignUpPage extends StatelessWidget {
                                               Image.file(controller.image).image,
                                           fit: BoxFit.cover,
                                           shadow: true,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          color: mainColor,
                                           height: width * 0.35,
                                           width: width * 0.35,
                                           icon: Icons.person,
                                           borderWidth: 2,
-                                          borderColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          iconColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                          borderColor: orangeColor,
+                                          iconColor: orangeColor,
                                         ),
                                         Positioned(
                                           bottom: 0,
@@ -85,18 +81,14 @@ class SignUpPage extends StatelessWidget {
                                               iconColor: const Color.fromARGB(
                                                   255, 214, 211, 211),
                                               shadow: false,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
+                                              color:orangeColor,
                                               height: width * 0.08,
                                               width: width * 0.08,
                                               icon: controller.isPicked == false
                                                   ? Icons.add
                                                   : Icons.delete,
                                               borderWidth: 1,
-                                              borderColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
+                                              borderColor: orangeColor,
                                             ),
                                           ),
                                         )
@@ -140,7 +132,7 @@ class SignUpPage extends StatelessWidget {
                                     width: width * 0.8,
                                     titleSize: width * 0.05,
                                     textColor:
-                                        Theme.of(context).colorScheme.primary,
+                                        orangeColor,
                                     text: 'make'.tr,
                                     press: () {
                                        _key.currentState!.save();

@@ -13,8 +13,6 @@ import 'login_page.dart';
 class ControllerPage extends StatelessWidget {
   const ControllerPage({Key? key}) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(

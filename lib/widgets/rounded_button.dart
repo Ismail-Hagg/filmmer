@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../helper/constants.dart';
 import 'custom_text.dart';
 
 class RoundButton extends StatelessWidget {
@@ -34,7 +35,7 @@ class RoundButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: press,
           style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).colorScheme.secondary,
+              primary: mainColor,
               padding:  EdgeInsets.symmetric( vertical: width*0.04),
               textStyle: TextStyle(
                 letterSpacing: 2,
@@ -45,8 +46,8 @@ class RoundButton extends StatelessWidget {
               )),
           child: Obx(
             () => Get.find<AuthController>().count.value == 1
-                ?  CircularProgressIndicator(
-                    color:Theme.of(context).colorScheme.primary,
+                ?  const CircularProgressIndicator(
+                    color:orangeColor,
                   )
                 : CustomText(text: text, color: textColor, size: titleSize,),
           ),

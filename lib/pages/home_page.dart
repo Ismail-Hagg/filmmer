@@ -1,12 +1,12 @@
-import 'package:filmpro/local_storage/user_data_pref.dart';
-import 'package:filmpro/services/theme_service.dart';
 import 'package:filmpro/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
 import '../controllers/home_controller.dart';
-import '../models/user_model.dart';
+import '../helper/constants.dart';
+import '../widgets/circle_container.dart';
+import '../widgets/network_image.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -16,49 +16,23 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton( 
-                icon: const Icon(Icons.nightlife),
-                //onPressed: () =>ThemeService().changeTheme(),
-                onPressed: () {
-                  Get.find<AuthController>().signOut();
-                  //print(UserData().getUser.email);
-                  //UserModel.fromMap(json.decode(UserData().box.read(userDataKey)));
-                }),
-                //  IconButton(
-                // icon: const Icon(Icons.face),
-                // onPressed: () {
-                //   controller.fig();
-                // }),
-                IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                 // controller.thing();
-                })
-          ],
-        ),
+        backgroundColor: mainColor,
         body: Center(
-            child: Column(  
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [ 
-            GetBuilder<HomeController>(
-              init:Get.find<HomeController>(),
-              builder:(controller)=> Column(
-                children: [
-                  CustomText(text: 'error : ${controller.model.isError.toString()}',color: Colors.red,), 
-                  CustomText(text: 'phone : ${controller.model.phoneNumber}',color: Colors.red,), 
-                  Container(
-                    height: MediaQuery.of(context).size.height-200,
-                      child: SingleChildScrollView(
-                          child: CustomText(
-                            color: Colors.black, 
-                    text: controller.res,
-                  ))),
-                ],
+          children:  [
+            GestureDetector(
+              onTap: ()=>Get.find<AuthController>().signOut(),
+              child:const  ImageNetwork(
+                color: orangeColor,
+                fit: BoxFit.contain,
+                height: 200,
+                isMovie: true,
+                link: 'https://images.unsplash.com/photo-1665582844012-33aa8b2c3d8d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+                width: 150,
               ),
             )
-          ], 
+          ],
         )));
   }
 }

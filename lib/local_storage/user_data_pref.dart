@@ -1,19 +1,15 @@
 import 'dart:convert';
-import 'dart:ui';
-
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../helper/constants.dart';
 import '../models/user_model.dart';
 
-class UserDataPref {
+class UserDataPref { 
   Future<UserModel> get getUser async {
     try {
       UserModel model = await _getUserData();
       return model;
     } catch (e) {
-      print('error : ${e.toString()}');
       return UserModel(
           birthday: {},
           bio: '',
@@ -29,7 +25,10 @@ class UserDataPref {
           onlinePicPath: '',
           phoneNumber: '',
           userId: '',
-          userName: '');
+          userName: '',
+          headAuth: '',
+          headOther: ''
+          );
     }
   }
 
@@ -37,6 +36,8 @@ class UserDataPref {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString(userDataKey, json.encode(model.toMap())).then((value) => print('Saved Successfully'));
   }
+
+  
 
   Future<UserModel> _getUserData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -48,6 +49,5 @@ class UserDataPref {
   Future<void> deleteUser() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.clear();
-    print('Data Deleted');
   }
 }

@@ -67,7 +67,8 @@ class Translation extends Translations {
           'firetoo':'Too many requests to log into this account',
           'fireserver':'Server error, please try again later',
           'fireemail':'Email address is invalid',
-          'firelogin':'Login failed. Please try again'
+          'firelogin':'Login failed. Please try again',
+          'imageerror':'Profile image was not uploaded to the server, go to settings page'
         },
         'ar_SA': {
           'Year': 'السنه',
@@ -132,7 +133,8 @@ class Translation extends Translations {
           'firetoo':'معلومات كثيره',
           'fireserver':'خطا في السيرفر حاول مره اخرى',
           'fireemail':'البريد لايصلح',
-          'firelogin':'فشل في تسجيل الدخول حاول مره اخرى'
+          'firelogin':'فشل في تسجيل الدخول حاول مره اخرى',
+          'imageerror':'صورة الملف الشخصي لم ترفع الا السيرفر , اذهب الا صفحه الاعدادات'
         }
       };
 }

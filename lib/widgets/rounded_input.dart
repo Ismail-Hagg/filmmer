@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helper/constants.dart';
+
 class RoundedInputField extends StatelessWidget {
   final Function(String?)? sav;
   final Widget? lead;
@@ -34,21 +36,21 @@ class RoundedInputField extends StatelessWidget {
           controller: conreol,
           style: TextStyle(
             fontFamily: 'OpenSans',
-            color: Theme.of(context).colorScheme.primary,
+            color: orangeColor,
             fontSize: width * 0.035,
           ),
-          cursorColor: Theme.of(context).colorScheme.primary,
+          cursorColor: orangeColor,
           keyboardType: isEmail,
           decoration: InputDecoration(
               suffixIcon: lead,
               icon: Icon(
                 icon,
-                color: Theme.of(context).colorScheme.primary,
+                color: orangeColor,
               ),
               hintText: hint,
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 fontFamily: 'OpenSans',
-                color: Theme.of(context).colorScheme.primary,
+                color: orangeColor,
               ),
               border: InputBorder.none)),
     );
@@ -72,7 +74,7 @@ class TextFieldContainer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
         width: width * 0.8,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: mainColor,
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(

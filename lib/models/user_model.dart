@@ -17,6 +17,8 @@ class UserModel {
    String phoneNumber;
    bool isSocial;
    String messagingToken;
+   String headAuth;
+   String headOther;
 
   UserModel({
     required this.userName,
@@ -33,7 +35,9 @@ class UserModel {
     required this.isError,
     required this.phoneNumber,
     required this.isSocial,
-    required this.messagingToken
+    required this.messagingToken,
+    required this.headAuth,
+    required this.headOther
   });
 
   toMap() {
@@ -52,7 +56,9 @@ class UserModel {
       'isError': isError,
       'phoneNumber' : phoneNumber,
       'isSocial':isSocial,
-      'messagingToken':messagingToken
+      'messagingToken':messagingToken,
+      'headAuth':headAuth,
+      'headOther':headOther,
     };
   }
 
@@ -73,6 +79,8 @@ class UserModel {
       phoneNumber : map['phoneNumber'],
       isSocial:map['isSocial'],
       messagingToken : map['messagingToken'],
+      headAuth : map['headAuth'],
+      headOther : map['headOther'],
     );
   }
 }

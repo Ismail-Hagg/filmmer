@@ -1,9 +1,11 @@
 import 'package:filmpro/controllers/auth_controller.dart';
+import 'package:filmpro/main.dart';
 import 'package:filmpro/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 
+import '../helper/constants.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/rounded_button.dart';
 import '../widgets/rounded_input.dart';
@@ -31,20 +33,20 @@ class LoginPage extends StatelessWidget {
                 children: [
                   Container(
                       height: (height * 0.5),
-                      color: Theme.of(context).colorScheme.secondary,
+                      color:mainColor,
                       child: Center(
                         child: Icon(
                           Icons.movie_rounded,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: orangeColor,
                           size: width * 0.25,
                         ),
                       )),
                   Positioned(
                     bottom: 0,
                     child: Container(
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 214, 211, 211),
-                          borderRadius: BorderRadius.only(
+                      decoration: const  BoxDecoration(
+                          color: milkyColor,
+                          borderRadius:  BorderRadius.only(
                               topLeft: Radius.circular(50),
                               topRight: Radius.circular(50))),
                       height: height * 0.6,
@@ -59,7 +61,7 @@ class LoginPage extends StatelessWidget {
                                 radius: 6,
                                 press:()=> Get.find<AuthController>().getNumbers(context),
                                 text: 'google'.tr,
-                                textColor: Theme.of(context).colorScheme.primary,
+                                textColor: orangeColor,
                                 titleSize: width * 0.045,
                                 height: height * 0.06,
                               ),
@@ -68,7 +70,7 @@ class LoginPage extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: CustomText(
                                   text: 'emailuse'.tr,
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color: blackClor,
                                   size: width * 0.035,
                                   weight: FontWeight.w600),
                             ),
@@ -102,9 +104,7 @@ class LoginPage extends StatelessWidget {
                                                       .value
                                                   ? Icons.visibility_off
                                                   : Icons.visibility,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary)),
+                                              color: mainColor)),
                                       isPass:
                                           Get.find<AuthController>().obcure.value,
                                       hint: 'pass'.tr,
@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
                                       width: width * 0.8,
                                       titleSize: width * 0.05,
                                       textColor:
-                                          Theme.of(context).colorScheme.primary,
+                                          orangeColor,
                                       text: 'login'.tr,
                                       press: () {
                                         _key.currentState!.save();

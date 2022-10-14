@@ -12,7 +12,6 @@ import 'package:sms_autofill/sms_autofill.dart';
 import '../helper/utils.dart';
 import '../models/user_model.dart';
 import '../pages/controller_page.dart';
-import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/google_sign_in_service.dart';
 
@@ -29,7 +28,6 @@ class AuthController extends GetxController {
     'https://www.googleapis.com/auth/user.phonenumbers.read',
   ]);
 
-  String res = '';
 
   final _count = 0.obs;
   final _obscure = true.obs;
@@ -48,6 +46,8 @@ class AuthController extends GetxController {
   String _email = '';
   String _password = '';
 
+  Map<String, String> thing={};
+
   late FirebaseMessaging token;
 
   final SmsAutoFill _autoFill = SmsAutoFill();
@@ -60,6 +60,7 @@ class AuthController extends GetxController {
     update();
   }
 
+  // get user phone number
   void getNumbers(context) {
     _autoFill.hint
         .then((value) => googleSignInMethod(context, value.toString()));
@@ -67,7 +68,7 @@ class AuthController extends GetxController {
 
   // sign in with google
   void googleSignInMethod(context, String number) async {
-    FocusScope.of(context).unfocus(); 
+    FocusScope.of(context).unfocus();
     count.value = 1;
     try {
       final dynamic googleUser = await _googleSignIn.signIn() ?? '';
@@ -81,28 +82,82 @@ class AuthController extends GetxController {
             idToken: authy.idToken, accessToken: authy.accessToken);
 
         await _auth.signInWithCredential(credential).then((user) async => {
-          FirestoreService().getCurrentUser(user.user!.uid).then((value) => print(value.data()))
-              // if(FirestoreService().getCurrentUser(user.user!.uid)){
-                
-              // }else{
-              //   _googleSignIn.currentUser?.authHeaders.then((head)  => {
-              //       GoogleSignInService()
-              //           .googleLogIn(
-              //               head, user.user!.uid.toString(), '', number)
-              //           .then((value)  => {
-              //             FirebaseMessaging.instance.getToken().then((token) => {
-              //               value.messagingToken=token.toString(),
-              //               saveDataFirebase(model: value),
-              //                 Get.offAll(() => const ControllerPage()),
-              //                 count.value = 0
-              //             })
-              //               })
-              //     }),
-              // }
+              FirestoreService()
+                  .getCurrentUser(user.user!.uid)
+                  .then((value) => {
+                        if (value.data() == null)
+                          {
+                            // first time logging in with google account
+                            _googleSignIn.currentUser?.authHeaders
+                                .then((head) => {
+                                  thing=head,
+                                      GoogleSignInService()
+                                          .googleLogIn(
+                                              head,
+                                              user.user!.uid.toString(),
+                                              '',
+                                              number)
+                                          .then((value) => {
+                                                if (value.isError)
+                                                  {
+                                                    snack(
+                                                        'error'.tr,
+                                                        getMessageFromErrorCode(
+                                                            ''))
+                                                  }
+                                                else
+                                                  {
+                                                    FirebaseMessaging.instance
+                                                        .getToken()
+                                                        .then((token) => {
+                                                              value.messagingToken =
+                                                                  token
+                                                                      .toString(),
+                                                                      // value.googleHeaders=head,
+                                                                      value.headAuth=head['Authorization'].toString(),
+                                                                      value.headOther=head['X-Goog-AuthUser'].toString(),
+                                                              saveDataFirebase(
+                                                                  model: value),
+                                                              Get.offAll(() =>
+                                                                  const ControllerPage()),
+                                                              count.value = 0,
+                                                            })
+                                                        .catchError((e) {
+                                                      value.messagingToken = '';
+                                                      saveDataFirebase(
+                                                          model: value);
+                                                      Get.offAll(() =>
+                                                          const ControllerPage());
+                                                      count.value = 0;
+                                                    })
+                                                  }
+                                              })
+                                          .catchError((e) {
+                                        snack('error'.tr,
+                                            getMessageFromErrorCode(e));
+                                      })
+                                    })
+                                .catchError((e) {
+                              snack('error'.tr, getMessageFromErrorCode(e));
+                            })
+                          }
+                        else
+                          {
+                            // logged with a google account before
+                            saveDataLocal(UserModel.fromMap(
+                                value.data() as Map<dynamic, dynamic>)),
+                            // getDocs(user.user!.uid);
+                            Get.offAll(() => const ControllerPage()),
+                            count.value = 0
+                          }
+                      })
+                  .catchError((e) {
+                snack('error'.tr, getMessageFromErrorCode(e));
+              })
             });
       }
     } on FirebaseAuthException catch (e) {
-      snack('error'.tr, e.toString());
+      snack('error'.tr, getMessageFromErrorCode(e));
 
       count.value = 0;
     } catch (e) {
@@ -123,27 +178,7 @@ class AuthController extends GetxController {
         await _auth
             .createUserWithEmailAndPassword(email: _email, password: _password)
             .then((user) async => {
-                  _path != ''
-                      ? FirebaseStorageService()
-                          .uploade(user.user!.uid, _image)
-                          .then((value) async => {
-                                await FirebaseMessaging.instance
-                                    .getToken()
-                                    .then((token) => {
-                                          _autoFill.hint.then((number) => {
-                                                saveDataFirebase(
-                                                    user: user,
-                                                    google: false,
-                                                    onlinePicPath: value,
-                                                    token: token.toString(),
-                                                    number: number.toString()),
-                                                Get.offAll(() =>
-                                                    const ControllerPage()),
-                                                count.value = 0
-                                              }),
-                                        }),
-                              })
-                      : await FirebaseMessaging.instance
+                      await FirebaseMessaging.instance
                           .getToken()
                           .then((token) => {
                                 _autoFill.hint.then((number) => {
@@ -153,6 +188,7 @@ class AuthController extends GetxController {
                                         onlinePicPath: '',
                                         token: token.toString(),
                                         number: number.toString(),
+                                        
                                       ),
                                       Get.offAll(() => const ControllerPage()),
                                       count.value = 0
@@ -186,6 +222,9 @@ class AuthController extends GetxController {
                   // getDocs(user.user!.uid);
                   Get.offAll(() => const ControllerPage());
                   count.value = 0;
+                }).catchError((e){
+                  snack('error'.tr, getMessageFromErrorCode(e));
+                  count.value = 0; 
                 })
               });
     } on FirebaseAuthException catch (e) {
@@ -259,7 +298,8 @@ class AuthController extends GetxController {
       String? onlinePicPath,
       String? token,
       String? number,
-      UserModel? model}) {
+      UserModel? model,
+      }) {
     UserModel userModel = model ??
         UserModel(
             birthday: {},
@@ -276,9 +316,12 @@ class AuthController extends GetxController {
             onlinePicPath: onlinePicPath.toString(),
             phoneNumber: number.toString(),
             userId: user?.user!.uid as String,
-            userName: _name);
-    // FirestoreService().addUsers(userModel);
-    // saveDataLocal(userModel);
+            userName: _name,
+            headAuth: '',
+            headOther: '',
+            );
+    FirestoreService().addUsers(userModel);
+    saveDataLocal(userModel);
   }
 
   // save user data locally

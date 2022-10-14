@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../helper/constants.dart';
 import 'custom_text.dart';
 
 class SocialButton extends StatelessWidget {
@@ -35,7 +36,7 @@ class SocialButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-           primary: Theme.of(context).colorScheme.secondary,
+           primary: mainColor
               ),
           onPressed: press,
           child: Row(

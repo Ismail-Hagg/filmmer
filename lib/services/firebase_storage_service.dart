@@ -9,9 +9,7 @@ class FirebaseStorageService {
     final String path = '$id/images/profile';
     final ref = FirebaseStorage.instance.ref().child(path);
     uploadTask = ref.putFile(file);
-
     final snapshot = await uploadTask!.whenComplete(() => {});
-
     return await snapshot.ref.getDownloadURL();
   }
 }

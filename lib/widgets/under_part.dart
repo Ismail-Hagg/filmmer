@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helper/constants.dart';
+
 class UnderParat extends StatelessWidget {
   final String titele;
   final String navigatorText;
@@ -21,7 +23,7 @@ class UnderParat extends StatelessWidget {
         Text(
           titele,
           style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+              color: mainColor,
               fontFamily: 'OpenSans',
               fontSize: titleSize,
               fontWeight: FontWeight.w600),
@@ -31,7 +33,7 @@ class UnderParat extends StatelessWidget {
           onTap: tap,
           child: Text(navigatorText,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: orangeColor,
                   fontFamily: 'OpenSans',
                   fontSize: titleSize,
                   fontWeight: FontWeight.w600)),
