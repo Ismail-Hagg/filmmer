@@ -62,6 +62,7 @@ class GoogleSignInService {
     } catch (e) {
       return model;
     }
+    
   }
 
 }

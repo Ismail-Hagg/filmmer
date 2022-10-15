@@ -10,6 +10,7 @@ class MovieWidget extends StatelessWidget {
   final String? rating;
   final double? borderWidth;
   final ImageProvider? image;
+  final bool isShadow;
   const MovieWidget(
       {Key? key,
       this.width,
@@ -17,7 +18,7 @@ class MovieWidget extends StatelessWidget {
       this.color,
       this.rating,
       this.borderWidth,
-      this.image})
+      this.image, required this.isShadow})
       : super(key: key);
 
   @override
@@ -28,6 +29,16 @@ class MovieWidget extends StatelessWidget {
             height: height ?? 0,
             width: width ?? 0,
             decoration: BoxDecoration(
+              boxShadow:  [
+           isShadow==true? const BoxShadow(
+              color: secondaryColor,
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset:  Offset(0, 3), // changes position of shadow
+            ):const BoxShadow(
+              
+            )
+          ],
               image: DecorationImage(image: image as ImageProvider,fit: BoxFit.cover),
               color: Colors.grey,
               borderRadius: BorderRadius.circular(15),
@@ -35,11 +46,9 @@ class MovieWidget extends StatelessWidget {
                   color: color ?? Colors.transparent, width: borderWidth ?? 0),
             )),
         rating !=null? Positioned(
-          top: 5,
-          right: 5,
+          top: 8,
+          right: 8,
           child: Container(
-            // width: 55,
-            // height: 30,
             decoration: BoxDecoration(
                 color: color!.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(5),
