@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class CustomText extends StatelessWidget {
   final String? text;
@@ -9,21 +10,45 @@ class CustomText extends StatelessWidget {
   final double? spacing;
   final TextOverflow? flow;
   final TextAlign? align;
-  const CustomText({Key? key, this.text, this.size, this.weight, this.color, this.maxline, this.flow, this.spacing, this.align}) : super(key: key);
+  final bool? isGradiant;
+  final List<Color>? colors;
+  final GradientDirection? direction;
+  const CustomText(
+      {Key? key,
+      this.text,
+      this.size,
+      this.weight,
+      this.color,
+      this.maxline,
+      this.flow,
+      this.spacing,
+      this.align,
+      this.isGradiant, this.colors, this.direction})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text??'',
-      maxLines: maxline,
-      textAlign: align,
-      style:TextStyle(
-        color: color, 
-        fontSize: size,
-        fontWeight: weight,
-        overflow: flow,
-        letterSpacing: spacing
-      )
-    );
+    return isGradiant == true
+        ? GradientText(
+          textAlign: align,
+          maxLines: maxline,
+            gradientDirection: direction,
+            text??'',
+            style: TextStyle(
+              fontWeight: weight,
+              fontSize: size,
+              overflow: flow,
+            ),
+            colors: colors??[],
+          )
+        : Text(text ?? '',
+            maxLines: maxline,
+            textAlign: align,
+            style: TextStyle(
+                color: color,
+                fontSize: size,
+                fontWeight: weight,
+                overflow: flow,
+                letterSpacing: spacing));
   }
 }

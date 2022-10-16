@@ -104,7 +104,7 @@ class LoginPage extends StatelessWidget {
                                                       .value
                                                   ? Icons.visibility_off
                                                   : Icons.visibility,
-                                              color: mainColor)),
+                                              color: orangeColor)),
                                       isPass:
                                           Get.find<AuthController>().obcure.value,
                                       hint: 'pass'.tr,

@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'package:filmpro/local_storage/user_data_pref.dart';
+import 'package:filmpro/models/move_model.dart';
 import 'package:get/get.dart';
 import '../helper/constants.dart';
 import '../helper/utils.dart';
 import '../models/home_page_model.dart';
 import '../models/user_model.dart';
+import '../pages/search_more_page.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/home_page_service.dart';
 
 class HomeController extends GetxController {
+  Move _move = Move();
+  Move get move =>_move;
   UserModel get model => _model;
   UserModel _model = UserModel(
       userName: '',
@@ -30,11 +34,11 @@ class HomeController extends GetxController {
       headAuth: '',
       headOther: '');
 
-  HomePageModel _upcomingMovies = HomePageModel();
-  HomePageModel _popularMovies = HomePageModel();
-  HomePageModel _popularShows = HomePageModel(); 
-  HomePageModel _topMovies = HomePageModel();
-  HomePageModel _topShows = HomePageModel();
+  HomePageModel _upcomingMovies = HomePageModel(results: []);
+  HomePageModel _popularMovies = HomePageModel(results: []);
+  HomePageModel _popularShows = HomePageModel(results: []);
+  HomePageModel _topMovies = HomePageModel(results: []);
+  HomePageModel _topShows = HomePageModel(results: []);
 
   HomePageModel get upcomingMovies => _upcomingMovies;
   HomePageModel get popularMovies => _popularMovies;
@@ -42,7 +46,7 @@ class HomeController extends GetxController {
   HomePageModel get topMovies => _topMovies;
   HomePageModel get topShows => _topShows;
 
-
+  List<String> urls = [upcoming, pop, popularTv, top, topTv];
 
   var count = 0.obs;
 
@@ -51,81 +55,43 @@ class HomeController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     load();
-    // head = Get.find<AuthController>().headers;
   }
 
   // get the user data from local storage
   void load() {
-    count.value=1;
     UserDataPref().getUser.then((value) => {
           _model = value,
-          apiCall(value),
+          apiCall(value.language),
           uploadImage(),
         });
   }
 
-  void apiCall(UserModel model) {
-    getUpcoming(upcoming,model.language.replaceAll('_', '-'));
-    getpopularMovies(pop,model.language.replaceAll('_', '-'));
-    getpopularShows(popularTv,model.language.replaceAll('_', '-'));
-    getTopRatedMovies(top,model.language.replaceAll('_', '-'));
-    getTopRatedShows(topTv,model.language.replaceAll('_', '-'));
-  }
-
-  void test()async{
-    // await HomePageService().getHomeInfo(upcoming,model.language.replaceAll('_', '-')).then((value) => {
-    //   //print(value.results![0].voteAverage.runtimeType),
-    //   print(upcoming+model.language.replaceAll('_', '-')),
-    //   print(value.errorMessage.toString())
-    // });
-    //print((9.toDouble()));
-  }
-
-  // api call to get the upcoming movies
-  getUpcoming(String link, String lan) async {
-    await HomePageService().getHomeInfo(link, lan).then((value) => {
-          _upcomingMovies = value,
-          print('_upcomingMovies isError : ${_upcomingMovies.isError}'),
-          print('_upcomingMovies isError : ${_upcomingMovies.errorMessage}'),
-        });
-  }
-
-  // api call to get the popular movies
-  getpopularMovies(String link, String lan) async {
-    await HomePageService().getHomeInfo(link, lan).then((value) => {
-          _popularMovies = value,
-          print('_popularMovies isError : ${_popularMovies.isError}'),
-          print('_popularMovies isError : ${_popularMovies.errorMessage}'),
-        });
-  }
-
-  // api call to get the popular shows
-  getpopularShows(String link, String lan) async {
-    await HomePageService().getHomeInfo(link, lan).then((value) => {
-          _popularShows = value,
-          print('_popularMovies isError : ${_popularMovies.isError}'),
-          print('_popularMovies isError : ${_popularMovies.errorMessage}'),
-          
-        });
-  }
-
-  // api call to get the top rated movies
-  getTopRatedMovies(String link, String lan) async {
-    await HomePageService().getHomeInfo(link, lan).then((value) => {
-          _topMovies = value,
-          print('_topMovies isError : ${_topMovies.isError}'),
-          print('_topMovies isError : ${_topMovies.errorMessage}'),
-        });
-  }
-
-  // api call to get the top rated movies
-  getTopRatedShows(String link, String lan) async {
-    await HomePageService().getHomeInfo(link, lan).then((value) => {
-          _topShows = value,
-          print('_topShows isError : ${_topShows.isError}'),
-          print('_topShows isError : ${_topShows.errorMessage}'),
-           count.value=0,
-        });
+  // api calls
+  void apiCall(String lan) async {
+    count.value = 1;
+    for (var i = 0; i < urls.length; i++) {
+      await HomePageService().getHomeInfo(urls[i], lan).then((value) => {
+        
+            if (i == 0)
+              {
+                _upcomingMovies = value,
+              }
+            else if (i == 1)
+              {
+                _popularMovies = value,
+              }
+            else if (i == 2)
+              {
+                _popularShows = value,
+              }
+            else if (i == 3)
+              {
+                _topMovies = value,
+              }
+            else if (i == 4)
+              {_topShows = value, count.value = 0}
+          });
+    }
   }
 
   // upload profile image to firebase storage
@@ -149,5 +115,11 @@ class HomeController extends GetxController {
         }
       });
     }
+  }
+
+  // navigate to search or more page
+  goToSearch(bool isSearch, String link, String title) {
+    _move = Move(isSearch: isSearch, link: link, title: title);
+    Get.to(() => SearchMorePage());
   }
 }

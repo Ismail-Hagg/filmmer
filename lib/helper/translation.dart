@@ -68,7 +68,10 @@ class Translation extends Translations {
           'fireserver':'Server error, please try again later',
           'fireemail':'Email address is invalid',
           'firelogin':'Login failed. Please try again',
-          'imageerror':'Profile image was not uploaded to the server, go to settings page'
+          'imageerror':'Profile image was not uploaded to the server, go to settings page',
+          'loaderror':'Error, Refresh the page',
+          'keeping':'Episode Keeping',
+          'myaccount':'My Account',
         },
         'ar_SA': {
           'Year': 'السنه',
@@ -134,7 +137,10 @@ class Translation extends Translations {
           'fireserver':'خطا في السيرفر حاول مره اخرى',
           'fireemail':'البريد لايصلح',
           'firelogin':'فشل في تسجيل الدخول حاول مره اخرى',
-          'imageerror':'صورة الملف الشخصي لم ترفع الا السيرفر , اذهب الا صفحه الاعدادات'
+          'imageerror':'صورة الملف الشخصي لم ترفع الا السيرفر , اذهب الا صفحه الاعدادات',
+          'loaderror':'خطا,حدث الصفحه',
+          'keeping':'متابعة الحلقات',
+          'myaccount':'حسابي'
         }
       };
 }

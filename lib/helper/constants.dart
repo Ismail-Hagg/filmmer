@@ -22,3 +22,4 @@ const top =
     'https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey&language=';
 const topTv =
     'https://api.themoviedb.org/3/tv/top_rated?api_key=$apiKey&language=';
+const search = 'https://api.themoviedb.org/3/search/multi?api_key=$apiKey&language=';

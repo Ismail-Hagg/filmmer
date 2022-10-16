@@ -11,6 +11,7 @@ class MovieWidget extends StatelessWidget {
   final double? borderWidth;
   final ImageProvider? image;
   final bool isShadow;
+  final Color? borderColor;
   const MovieWidget(
       {Key? key,
       this.width,
@@ -18,14 +19,33 @@ class MovieWidget extends StatelessWidget {
       this.color,
       this.rating,
       this.borderWidth,
-      this.image, required this.isShadow})
+      this.image, required this.isShadow, this.borderColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
+        image!=null? Container(
+            height: height ?? 0,
+            width: width ?? 0,
+            decoration: BoxDecoration(
+              boxShadow:  [
+           isShadow==true? const BoxShadow(
+              color: secondaryColor,
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset:  Offset(0, 3), // changes position of shadow
+            ):const BoxShadow(
+               
+            )
+          ],
+              image: DecorationImage(image: image as ImageProvider,fit: BoxFit.cover),
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                  color: borderColor ?? Colors.transparent, width: borderWidth ?? 0),
+            )):Container(
             height: height ?? 0,
             width: width ?? 0,
             decoration: BoxDecoration(
@@ -39,11 +59,10 @@ class MovieWidget extends StatelessWidget {
               
             )
           ],
-              image: DecorationImage(image: image as ImageProvider,fit: BoxFit.cover),
-              color: Colors.grey,
+              color:  Colors.grey,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
-                  color: color ?? Colors.transparent, width: borderWidth ?? 0),
+                  color: borderColor ?? Colors.transparent, width: borderWidth ?? 0),
             )),
         rating !=null? Positioned(
           top: 8,

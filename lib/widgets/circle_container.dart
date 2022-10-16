@@ -116,33 +116,64 @@ class CircleContainer extends StatelessWidget {
             ),
         )
         : Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: borderColor ?? Colors.transparent,
-                width: borderWidth ?? 0.0,
-              ),
-              color: color,
-              shape: BoxShape.circle,
-              boxShadow: [
-                shadow == true
-                    ? BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
+          width: width,
+          child: Column(
+            children: [
+              Container(
+                  height: height,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: borderColor ?? Colors.transparent,
+                      width: borderWidth ?? 0.0,
+                    ),
+                    color: color,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      shadow == true
+                          ? BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            )
+                          : const BoxShadow()
+                    ],
+                  ),
+                  child: Center(
+                      child: Icon(
+                    icon,
+                    size: width * 0.45,
+                    color: iconColor,
+                  )),
+                ),
+                SizedBox(
+                  height: topSpacing ?? 0.0,
+                ),
+                name != null
+                    ? CustomText(
+                        align: TextAlign.center,
+                        text: name,
+                        size: nameSize,
+                        color: nameColor,
+                        flow: flow,
+                        maxline: nameMax,
+                        weight: weight,
                       )
-                    : const BoxShadow()
-              ],
-            ),
-            child: Center(
-                child: Icon(
-              icon,
-              size: width * 0.45,
-              color: iconColor,
-            )),
-          );
+                    : Container(),
+                char != null
+                    ? CustomText(
+                        align: TextAlign.center,
+                        text: char,
+                        size: charSize,
+                        color: charColor,
+                        flow: flow,
+                        maxline: charMax,
+                        weight: weight,
+                      )
+                    : Container()
+            ],
+          ),
+        );
 
     return contain;
   }

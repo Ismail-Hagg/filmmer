@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:filmpro/widgets/movie_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../helper/constants.dart';
 import 'circle_container.dart';
 
 class ImageNetwork extends StatelessWidget {
@@ -50,7 +52,8 @@ class ImageNetwork extends StatelessWidget {
       this.align,
       this.nameMax,
       this.charMax,
-      this.weight, this.rating});
+      this.weight,
+      this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -80,30 +83,52 @@ class ImageNetwork extends StatelessWidget {
               borderColor: borderColor ?? Colors.transparent,
               borderWidth: borderWidth ?? 0)
           : MovieWidget(
+              borderColor: borderColor,
               isShadow: isShadow,
               height: height,
               width: width,
               color: color,
               rating: rating,
               image: imageProvider,
-              borderWidth: 2),
+              borderWidth: borderWidth ?? 0),
       placeholder: (context, url) => isMovie == false
-          ? CircleContainer(
-              isPicOk: true,
-              shadow: false,
-              color: color,
-              fit: fit,
-              height: height,
-              image: Image.asset('assets/images/google_logo.png').image,
-              width: width,
+          ? Shimmer.fromColors(
+              period: const Duration(seconds: 1),
+              baseColor: secondaryColor,
+              highlightColor: mainColor,
+              child: CircleContainer(
+                isPicOk: false,
+                shadow: false,
+                color: color,
+                fit: fit,
+                height: height,
+                width: width,
+                name: name,
+                char: char,
+                nameSize: nameSize,
+                charSize: charSize,
+                nameColor: nameColor,
+                charColor: charColor,
+                topSpacing: topSpacing,
+                flow: flow,
+                align: align,
+                nameMax: nameMax,
+                charMax: charMax,
+                weight: weight,
+              ),
             )
-          : MovieWidget(
-              isShadow: isShadow,
-              height: height,
-              width: width,
-              color: color,
-              image: Image.asset('assets/images/google_logo.png').image,
-              borderWidth: 2),
+          : Shimmer.fromColors(
+              period: const Duration(seconds: 1),
+              baseColor: secondaryColor,
+              highlightColor: mainColor,
+              child: MovieWidget(
+                  borderColor: borderColor,
+                  isShadow: false,
+                  height: height,
+                  width: width,
+                  color: Colors.grey,
+                  rating: '',
+                  borderWidth: borderWidth ?? 0)),
       errorWidget: (context, url, error) => isMovie == false
           ? CircleContainer(
               isPicOk: true,
@@ -113,15 +138,28 @@ class ImageNetwork extends StatelessWidget {
               height: height,
               image: Image.asset('assets/images/no_image.png').image,
               width: width,
+              name: name,
+                char: char,
+                nameSize: nameSize,
+                charSize: charSize,
+                nameColor: nameColor,
+                charColor: charColor,
+                topSpacing: topSpacing,
+                flow: flow,
+                align: align,
+                nameMax: nameMax,
+                charMax: charMax,
+                weight: weight,
             )
           : MovieWidget(
+              borderColor: borderColor,
               isShadow: isShadow,
-              borderWidth: 2,
+              borderWidth: borderWidth ?? 0,
               height: height,
               width: width,
               color: color,
               //rating: '5.8',
-              image: Image.asset('assets/images/google_logo.png').image,
+              image: Image.asset('assets/images/no_image.png').image,
             ),
     );
   }

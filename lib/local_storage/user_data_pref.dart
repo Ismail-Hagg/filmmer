@@ -13,7 +13,7 @@ class UserDataPref {
       return UserModel(
           birthday: {},
           bio: '',
-          email: '',
+          email: 'Email',
           gender: '',
           isDarkTheme: false,
           isError: true,
@@ -25,7 +25,7 @@ class UserDataPref {
           onlinePicPath: '',
           phoneNumber: '',
           userId: '',
-          userName: '',
+          userName: 'Username',
           headAuth: '',
           headOther: ''
           );

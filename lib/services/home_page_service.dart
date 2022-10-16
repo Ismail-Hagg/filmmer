@@ -6,13 +6,11 @@ class HomePageService {
   Future<HomePageModel> getHomeInfo(String link, String language) async {
     HomePageModel model = HomePageModel();
     dynamic result = '';
-    var url = Uri.parse(link + language);
+    var url = Uri.parse(link + language.replaceAll('_', '-'));
     try {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         result = jsonDecode(response.body);
-        print(result['results'][0]['vote_average']);
-        print((result['results'][0]['vote_average']).runtimeType);
         model = HomePageModel.fromJson(result);
       } else {
         model =
