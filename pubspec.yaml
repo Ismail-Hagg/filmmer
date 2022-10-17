@@ -43,6 +43,7 @@ dependencies:
   get_storage: ^2.0.3
   google_sign_in: ^5.4.2
   http: ^0.13.5
+  shape_of_view_null_safe: ^2.0.0
   shared_preferences: ^2.0.15
   shimmer: ^2.0.0
   simple_gradient_text: ^1.2.4

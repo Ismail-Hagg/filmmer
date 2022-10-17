@@ -38,12 +38,12 @@ class Results {
     originalLanguage = json['original_language'];
     originalTitle = json['original_title']??json['original_name'];
     overview = json['overview'];
-    popularity = json['popularity']!=null?(json['popularity'].toString()):'0.0';
-    posterPath = json['poster_path'];
+    popularity = json['popularity']!=null?(json['popularity'].toString()):'';
+    posterPath = json['media_type']=='person'? json['profile_path']:json['poster_path'];
     releaseDate = json['release_date']??'Year';
     title = json['title'] ?? json['name'];
     video = json['video']??false;
-    voteAverage =(json['vote_average'].toDouble()) ??0.0;
+    voteAverage = json['vote_average']!=null? double.parse(json['vote_average'].toString()):0.0;
     isShow = json['first_air_date']!=null?true:false;
     mediaType = json['media_type']??'';
   }

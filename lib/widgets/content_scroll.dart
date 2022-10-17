@@ -91,14 +91,13 @@ class ContentScroll extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: paddingY),
                       child: GestureDetector(
                         onTap: () {
-                          print(model.results![index].title);
                         },
                         child: ImageNetwork(
-                          borderWidth: borderWidth,
+                          borderWidth: borderWidth??0,
                           borderColor: borderColor??Colors.transparent,
                           rating: model.results?[index].voteAverage != null
                               ? model.results![index].voteAverage.toString()
-                              : '0.0',
+                              : '',
                           link: imagebase +
                               (model.results?[index].posterPath).toString(),
                           height: picHeight,

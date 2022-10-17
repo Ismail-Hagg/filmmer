@@ -6,6 +6,7 @@ import 'package:filmpro/widgets/network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/auth_controller.dart';
 import '../helper/constants.dart';
 import '../models/user_model.dart';
 import 'circle_container.dart';
@@ -180,6 +181,7 @@ Widget DrawItems(double height, double width) {
           onTap: () {
             Get.back();
             //Get.to(() => Settings());
+            Get.find<AuthController>().signOut();
           },
         ),
       ],

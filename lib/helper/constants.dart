@@ -6,8 +6,10 @@ const userDataKey = 'userDataKey';
 const orangeColor = Color.fromRGBO(238, 141, 51, 1);
 const milkyColor = Color.fromARGB(255, 214, 211, 211);
 const mainColor = Color.fromRGBO(48, 48, 48, 1);
-const secondaryColor = Color.fromARGB(255, 91, 91, 94);
+const secondaryColor = Color.fromRGBO(55, 56, 62, 1);
+
 const blackClor = Colors.black;
+const whiteColor = Colors.white;
 const apiKey = 'e11cff04b1fcf50079f6918e5199d691';
 
 const imagebase = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';

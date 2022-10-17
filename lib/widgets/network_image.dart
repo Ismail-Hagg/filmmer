@@ -151,14 +151,15 @@ class ImageNetwork extends StatelessWidget {
                 charMax: charMax,
                 weight: weight,
             )
-          : MovieWidget(
+          : 
+          MovieWidget(
               borderColor: borderColor,
-              isShadow: isShadow,
+              isShadow: false,
               borderWidth: borderWidth ?? 0,
               height: height,
               width: width,
               color: color,
-              //rating: '5.8',
+              rating: '',
               image: Image.asset('assets/images/no_image.png').image,
             ),
     );

@@ -29,7 +29,7 @@ class SearchMorePage extends StatelessWidget {
                       controller: controller.txt,
                       cursorColor: orangeColor,
                       autofocus: true,
-                      style: const TextStyle(color: orangeColor),
+                      style:  TextStyle(color: orangeColor,fontSize:MediaQuery.of(context).size.width*0.045),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'search'.tr,
@@ -50,7 +50,19 @@ class SearchMorePage extends StatelessWidget {
                       controller.clearFocus();
                     },
                     splashRadius: 15,
-                  )
+                  ),
+                  GetBuilder<SearchMorePageController>(
+                      init: Get.find<SearchMorePageController>(),
+                      builder: (builder) => builder.pageLoad == 1
+                          ? const Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: orangeColor,
+                                ),
+                              ),
+                            )
+                          : Container())
                 ],
               ))
           : AppBar(
@@ -60,7 +72,22 @@ class SearchMorePage extends StatelessWidget {
               title: CustomText(
                   text: controller.move.title,
                   color: orangeColor,
-                  size: MediaQuery.of(context).size.width * 0.045)),
+                  size: MediaQuery.of(context).size.width * 0.045),
+              actions: [
+                GetBuilder<SearchMorePageController>(
+                    init: Get.find<SearchMorePageController>(),
+                    builder: (builder) => builder.pageLoad == 1
+                        ? const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: orangeColor,
+                              ),
+                            ),
+                          )
+                        : Container())
+              ],
+            ),
       body: GetBuilder<SearchMorePageController>(
         init: Get.find<SearchMorePageController>(),
         builder: (builder) => LayoutBuilder(
@@ -74,69 +101,157 @@ class SearchMorePage extends StatelessWidget {
                   ? Container()
                   : builder.model.isError == true
                       ? Center(
-                          child: GestureDetector(
-                          onTap: () {},
-                          child: Icon(
-                            Icons.refresh,
-                            color: orangeColor,
-                            size: constraints.maxWidth * 0.4,
-                          ),
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              text: builder.model.errorMessage,
+                              color: orangeColor,
+                              size: constraints.maxWidth * 0.05,
+                              flow: TextOverflow.visible,
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  controller.searchReady(controller.query),
+                              child: Icon(
+                                Icons.refresh,
+                                color: orangeColor,
+                                size: constraints.maxWidth * 0.25,
+                              ),
+                            ),
+                          ],
                         ))
+                        
                       : 
-                      // Container(
-                      //     height: constraints.maxHeight,
-                      //     child: GridView.count(
-                      //         primary: false,
-                      //         padding: const EdgeInsets.all(12),
-                      //         crossAxisSpacing: 2,
-                      //         mainAxisSpacing: 2,
-                      //         crossAxisCount: 3,
-                      //         children: List.generate(
-                      //             builder.model.results!.length, (index) {
-                      //           return ImageNetwork(
-                      //             borderWidth: 2,
-                      //             borderColor: orangeColor,
-                      //             rating: builder
-                      //                 .model.results?[index].voteAverage
-                      //                 .toString(),
-                      //             link: imagebase +
-                      //                 (builder.model.results?[index].posterPath)
-                      //                     .toString(),
-                      //             height: constraints.maxHeight,
-                      //             width: constraints.maxWidth,
-                      //             isMovie: true,
-                      //             isShadow: false,
-                      //             color: orangeColor,
-                      //             fit: BoxFit.contain,
-                      //           );
-                      //         })));
-                      Expanded(
-                    child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 2,
-                            runSpacing: 2,
-                            children: List.generate(
-                                builder.model.results!.length, (index) {
-                               return ImageNetwork(
-                                  borderWidth: 2,
-                                  borderColor: orangeColor,
-                                  rating: builder
-                                      .model.results?[index].voteAverage
-                                      .toString(),
-                                  link: imagebase +
-                                      (builder.model.results?[index].posterPath)
-                                          .toString(),
-                                  height: constraints.maxHeight*0.3,
-                                  width: constraints.maxWidth*0.329,
-                                  isMovie: true,
-                                  isShadow: false,
+                      builder.model.totalResults == 0?
+                             Center(
+                                child: CustomText(
+                                  text: 'res'.tr,
+                                  size: constraints.maxWidth * 0.05,
                                   color: orangeColor,
-                                  fit: BoxFit.contain,
-                                );
-                            }))),
-                  );
+                                ),
+                              ):
+                      Expanded(
+                          child: SingleChildScrollView(
+                              controller: builder.scrollController,
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(children: [
+                                Wrap(
+                                    direction: Axis.horizontal,
+                                    spacing: 2,
+                                    runSpacing: 2,
+                                    children: List.generate(
+                                        builder.model.results!.length, (index) {
+                                      return GestureDetector(
+                                        onTap: () =>builder.navToDetale(),
+                                        child: ImageNetwork(
+                                          borderWidth: 2,
+                                          borderColor: orangeColor,
+                                          rating: builder
+                                              .model.results?[index].voteAverage
+                                              .toString(),
+                                          link: imagebase +
+                                              (builder.model.results?[index]
+                                                      .posterPath)
+                                                  .toString(),
+                                          height: constraints.maxHeight * 0.3,
+                                          width: constraints.maxWidth * 0.329,
+                                          isMovie: true,
+                                          isShadow: false,
+                                          color: orangeColor,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      );
+                                    }))
+                              ])));
+
+          //  return
+
+          //    builder.indicator == 1
+          //       ? const Center(
+          //           child: CircularProgressIndicator(
+          //           color: orangeColor,
+          //         )):
+          //         builder.model.results==null?
+          //  Container()
+          //           : builder.model.isError == true
+          //               ? Center(
+          //                   child: Column(
+          //                     mainAxisAlignment: MainAxisAlignment.center,
+          //                     children: [
+          //                       CustomText(
+          //                       text: builder.model.errorMessage,
+          //                       color: orangeColor,
+          //                       size: constraints.maxWidth * 0.05,
+          //                       flow: TextOverflow.visible,
+          //                     ),
+          //                       GestureDetector(
+          //                       onTap: () =>controller.searchReady(controller.query),
+          //                       child: Icon(
+          //                         Icons.refresh,
+          //                         color: orangeColor,
+          //                         size: constraints.maxWidth * 0.25,
+          //                       ),
+          //                 ),
+          //                     ],
+          //                   ))
+          //               : builder.model.totalResults == 0
+          //                   ? Center(
+          //                       child: CustomText(
+          //                         text: 'res'.tr,
+          //                         size: constraints.maxWidth * 0.05,
+          //                         color: orangeColor,
+          //                       ),
+          //                     )
+
+          //                   : Expanded(
+          //                       child: SingleChildScrollView(
+          //                           controller: builder.scrollController,
+          //                           physics: const BouncingScrollPhysics(),
+          //                           child: Column(
+          //                             children: [
+          //                               Wrap(
+          //                                   direction: Axis.horizontal,
+          //                                   spacing: 2,
+          //                                   runSpacing: 2,
+          //                                   children: List.generate(
+          //                                       builder.model.results!.length,
+          //                                       (index) {
+          //                                     return ImageNetwork(
+          //                                       borderWidth: 2,
+          //                                       borderColor: orangeColor,
+          //                                       rating: builder.model
+          //                                           .results?[index].voteAverage
+          //                                           .toString(),
+          //                                       link: imagebase +
+          //                                           (builder.model.results?[index]
+          //                                                   .posterPath)
+          //                                               .toString(),
+          //                                       height:
+          //                                           constraints.maxHeight * 0.3,
+          //                                       width:
+          //                                           constraints.maxWidth * 0.329,
+          //                                       isMovie: true,
+          //                                       isShadow: false,
+          //                                       color: orangeColor,
+          //                                       fit: BoxFit.contain,
+          //                                     );
+          //                                   })),
+          //                               builder.pageLoad == 1
+          //                                   ? const Padding(
+          //                                       padding: EdgeInsets.all(12.0),
+          //                                       child: Center(
+          //                                         child:
+          //                                             CircularProgressIndicator(
+          //                                           // backgroundColor: mainColor,
+          //                                           color: orangeColor,
+          //                                         ),
+          //                                       ),
+          //                                     )
+          //                                   : Container()
+          //                             ],
+          //                           )),
+          //                     );
         }),
       ),
     );
