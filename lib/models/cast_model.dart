@@ -1,11 +1,17 @@
 class CastModel {
   List<Cast>? cast;
+  bool? isError;
+  String? errorMessage;
 
   CastModel({
     this.cast,
+    this.isError,
+    this.errorMessage
   });
 
   CastModel.fromJson(Map<String, dynamic> json) {
+    isError=false;
+    errorMessage='';
     if (json['cast'] != null) {
       cast = <Cast>[];
       json['cast'].forEach((v) {

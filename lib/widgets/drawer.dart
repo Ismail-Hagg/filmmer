@@ -119,72 +119,76 @@ Widget header(double height, double width) {
 Widget DrawItems(double height, double width) {
   return Container(
     padding: const EdgeInsets.all(20),
-    child: Wrap(
-      runSpacing: 16,
-      children: [
-        ListTile(
-          leading: const Icon(
-            Icons.person,
-            color: orangeColor,
+    child: SingleChildScrollView(
+      child: Wrap(
+        runSpacing: 16,
+        children: [
+          ListTile(
+            leading: const Icon(
+              Icons.person,
+              color: orangeColor,
+            ),
+            title: CustomText(
+              text: 'myaccount'.tr,
+              size: width * 0.05,
+            ),
+            onTap: () {
+              Get.back();
+             // Get.to(() => WatchList());
+            },
           ),
-          title: CustomText(
-            text: 'myaccount'.tr,
-            size: width * 0.05,
+           ListTile(
+            leading: const Icon(
+              Icons.list,
+              color: orangeColor,
+            ),
+            title: CustomText(
+              text: 'watchList'.tr,
+              size: width * 0.05,
+            ),
+            onTap: () {
+              Get.back();
+             // Get.to(() => WatchList());
+            },
           ),
-          onTap: () {
-            Get.back();
-           // Get.to(() => WatchList());
-          },
-        ),
-         ListTile(
-          leading: const Icon(
-            Icons.list,
-            color: orangeColor,
+          ListTile(
+            leading: const Icon(Icons.favorite, color: orangeColor),
+            title: CustomText(
+              text: 'favourite'.tr,
+              size: width * 0.05,
+            ),
+            onTap: () {
+              Get.back();
+              Get.updateLocale(const Locale('en_US'));
+              //Get.to(() => FavoritesScreen());
+            },
           ),
-          title: CustomText(
-            text: 'watchList'.tr,
-            size: width * 0.05,
+          ListTile(
+            leading: const Icon(Icons.tv, color: orangeColor),
+            title: CustomText(
+              text: 'keeping'.tr,
+              size: width * 0.05,
+            ),
+            onTap: () {
+              Get.back();
+              Get.updateLocale(const Locale('ar_SA'));
+              //Get.to(() => FavoritesScreen());
+            },
           ),
-          onTap: () {
-            Get.back();
-           // Get.to(() => WatchList());
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.favorite, color: orangeColor),
-          title: CustomText(
-            text: 'favourite'.tr,
-            size: width * 0.05,
+          ListTile(
+            leading: const Icon(Icons.settings, color: orangeColor),
+            title: CustomText(
+              text: 'settings'.tr,
+              size: width * 0.05,
+            ),
+            onTap: () {
+              Get.back();
+              //Get.to(() => Settings());
+              Get.find<AuthController>().signOut();
+            },
           ),
-          onTap: () {
-            Get.back();
-            //Get.to(() => FavoritesScreen());
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.tv, color: orangeColor),
-          title: CustomText(
-            text: 'keeping'.tr,
-            size: width * 0.05,
-          ),
-          onTap: () {
-            Get.back();
-            //Get.to(() => FavoritesScreen());
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings, color: orangeColor),
-          title: CustomText(
-            text: 'settings'.tr,
-            size: width * 0.05,
-          ),
-          onTap: () {
-            Get.back();
-            //Get.to(() => Settings());
-            Get.find<AuthController>().signOut();
-          },
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

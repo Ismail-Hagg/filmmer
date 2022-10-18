@@ -5,9 +5,11 @@ class RecomendationModel {
   List<Results>? results;
   int? totalPages;
   int? totalResults;
+  bool? isError;
+  String? errorMessage;
 
   RecomendationModel(
-      {this.page, this.results, this.totalPages, this.totalResults});
+      {this.page, this.results, this.totalPages, this.totalResults,this.isError, this.errorMessage});
 
   RecomendationModel.fromJson(Map<String, dynamic> json) {
     page = json['page'];
@@ -19,6 +21,8 @@ class RecomendationModel {
     }
     totalPages = json['total_pages'];
     totalResults = json['total_results'];
+    isError=false;
+    errorMessage='';
   }
 
   Map<String, dynamic> toJson() {

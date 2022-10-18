@@ -1,4 +1,3 @@
-
 import 'package:filmpro/models/prod_country_model.dart';
 import 'package:filmpro/models/recomendation_model.dart';
 
@@ -25,6 +24,8 @@ class MovieDetaleModel {
   String? originCountry;
   CastModel? cast;
   RecomendationModel? recomendation;
+  bool? isError;
+  String? errorMessage;
 
   MovieDetaleModel(
       {this.adult,
@@ -44,7 +45,8 @@ class MovieDetaleModel {
       this.isShow,
       this.originCountry,
       this.cast,
-      this.recomendation});
+      this.recomendation,
+      this.isError,this.errorMessage});
 
   MovieDetaleModel.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
@@ -61,19 +63,20 @@ class MovieDetaleModel {
     if (json['production_companies'] != null) {
       json['production_companies'].forEach((v) {});
     }
-    if (json['production_countries'] != null&&json['production_countries'].length!=0) {
+    if (json['production_countries'] != null &&
+        json['production_countries'].length != 0) {
       productionCountries = <ProductionCountries>[];
       json['production_countries'].forEach((v) {
         productionCountries!.add(ProductionCountries.fromJson(v));
       });
-    }else{
+    } else {
       productionCountries = <ProductionCountries>[
-        ProductionCountries(name:'UnKnown')
+        ProductionCountries(name: 'UnKnown')
       ];
     }
-    releaseDate = json['release_date'] != null &&json['release_date']!=''
+    releaseDate = json['release_date'] != null && json['release_date'] != ''
         ? json['release_date'].substring(0, 4)
-        : json['first_air_date'] != null &&json['first_air_date']!=''
+        : json['first_air_date'] != null && json['first_air_date'] != ''
             ? json['first_air_date'].substring(0, 4)
             : 'Unknown';
     runtime = json['runtime'] == null
@@ -94,6 +97,8 @@ class MovieDetaleModel {
     isShow = json['first_air_date'] == null ? false : true;
     originCountry =
         json['origin_country'] == null ? '' : json['origin_country'][0];
+    isError = false;
+    errorMessage = '';
   }
 
   Map<String, dynamic> toJson() {

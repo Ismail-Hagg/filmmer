@@ -43,7 +43,7 @@ class Results {
     releaseDate = json['release_date']??'Year';
     title = json['title'] ?? json['name'];
     video = json['video']??false;
-    voteAverage = json['vote_average']!=null? double.parse(json['vote_average'].toString()):0.0;
+    voteAverage = json['vote_average']!=null? double.parse(json['vote_average'].toStringAsFixed(1)):0.0;
     isShow = json['first_air_date']!=null?true:false;
     mediaType = json['media_type']??'';
   }

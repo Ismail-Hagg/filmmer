@@ -1,10 +1,10 @@
 import 'package:filmpro/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../helper/constants.dart';
 import '../models/home_page_model.dart';
+import '../models/movie_deltale_model.dart';
 import 'custom_text.dart';
 import 'network_image.dart';
 
@@ -20,6 +20,7 @@ class ContentScroll extends StatelessWidget {
   final bool isMovie;
   final bool isArrow;
   final HomePageModel model;
+  final MovieDetaleModel? detales;
   final Color? borderColor;
   final double? borderWidth;
   final String link;
@@ -35,7 +36,7 @@ class ContentScroll extends StatelessWidget {
       required this.picWidth,
       required this.isMovie,
       required this.isArrow,
-      required this.model, this.borderColor, this.borderWidth, required this.link})
+      required this.model, this.borderColor, this.borderWidth, required this.link, this.detales})
       : super(key: key);
 
   @override

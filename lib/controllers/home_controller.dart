@@ -4,16 +4,22 @@ import 'package:filmpro/models/move_model.dart';
 import 'package:get/get.dart';
 import '../helper/constants.dart';
 import '../helper/utils.dart';
+import '../models/cast_model.dart';
 import '../models/home_page_model.dart';
+import '../models/movie_deltale_model.dart';
+import '../models/recomendation_model.dart';
+import '../models/results_model.dart';
 import '../models/user_model.dart';
+import '../pages/movie_detale_page.dart';
 import '../pages/search_more_page.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/home_page_service.dart';
+import 'movie_detale_controller.dart';
 
 class HomeController extends GetxController {
   Move _move = Move();
-  Move get move =>_move;
+  Move get move => _move;
   UserModel get model => _model;
   UserModel _model = UserModel(
       userName: '',
@@ -34,17 +40,19 @@ class HomeController extends GetxController {
       headAuth: '',
       headOther: '');
 
-  HomePageModel _upcomingMovies = HomePageModel(results: []);
-  HomePageModel _popularMovies = HomePageModel(results: []);
-  HomePageModel _popularShows = HomePageModel(results: []);
-  HomePageModel _topMovies = HomePageModel(results: []);
-  HomePageModel _topShows = HomePageModel(results: []);
+  HomePageModel _upcomingMovies = HomePageModel(results: [],isError: false);
+  HomePageModel _popularMovies = HomePageModel(results: [],isError: false);
+  HomePageModel _popularShows = HomePageModel(results: [],isError: false);
+  HomePageModel _topMovies = HomePageModel(results: [],isError: false);
+  HomePageModel _topShows = HomePageModel(results: [],isError: false);
+  MovieDetaleModel _movieDetales = MovieDetaleModel();
 
   HomePageModel get upcomingMovies => _upcomingMovies;
   HomePageModel get popularMovies => _popularMovies;
   HomePageModel get popularShows => _popularShows;
   HomePageModel get topMovies => _topMovies;
   HomePageModel get topShows => _topShows;
+  MovieDetaleModel get movieDetales => _movieDetales;
 
   List<String> urls = [upcoming, pop, popularTv, top, topTv];
 
@@ -118,8 +126,42 @@ class HomeController extends GetxController {
   }
 
   // navigate to search or more page
-  goToSearch(bool isSearch, String link, String title) {
+  void goToSearch(bool isSearch, String link, String title) {
     _move = Move(isSearch: isSearch, link: link, title: title);
     Get.to(() => SearchMorePage());
   }
+
+  // navigate to the detale page
+  void navToDetale(Results? res) {
+    if (res!.mediaType == 'person') {
+      // navigate to cast member page
+      navToCast();
+    } else {
+      _movieDetales = MovieDetaleModel(
+        recomendation: RecomendationModel(
+          results: []
+        ),
+        cast: CastModel(cast: []),
+        id: res.id,
+        posterPath: res.posterPath,
+        overview: res.overview,
+        voteAverage: double.parse(res.voteAverage.toString()),
+        title: res.title,
+        isShow: res.isShow,
+        runtime: 0,
+        productionCountries: null,
+        genres: null,
+        releaseDate: res.releaseDate,
+      );
+      Get.create(() => (MovieDetaleController()), permanent: false);
+      Get.to(() => MovieDetalePage(), preventDuplicates: false);
+    }
+  }
+
+  // navigate to cast member page
+  void navToCast(){
+    print('Navigate to cast member page');
+  }
+
+
 }

@@ -71,20 +71,20 @@ class MovieWidget extends StatelessWidget {
                       color: borderColor ?? Colors.transparent,
                       width: borderWidth ?? 0),
                 )),
-        rating != '0.0'
+        rating != null
             ? Positioned(
                 top: 8,
                 right: 8,
                 child: Container(
                   decoration: BoxDecoration(
-                    color:rating==''?Colors.transparent: color!.withOpacity(0.6),
+                    color:rating=='0.0'?Colors.transparent: color!.withOpacity(0.6),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(1.0),
                     child: Center(
                         child: CustomText(
-                      text: rating,
+                      text: rating=='0.0'?'':rating,
                       color: milkyColor,
                       size: 18,
                     )),

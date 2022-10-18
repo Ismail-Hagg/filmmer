@@ -72,6 +72,7 @@ class Translation extends Translations {
           'loaderror':'Error, Refresh the page',
           'keeping':'Episode Keeping',
           'myaccount':'My Account',
+          'genre':'Genre'
         },
         'ar_SA': {
           'Year': 'السنه',
@@ -140,7 +141,8 @@ class Translation extends Translations {
           'imageerror':'صورة الملف الشخصي لم ترفع الا السيرفر , اذهب الا صفحه الاعدادات',
           'loaderror':'خطا,حدث الصفحه',
           'keeping':'متابعة الحلقات',
-          'myaccount':'حسابي'
+          'myaccount':'حسابي',
+          'genre':'تصنيف'
         }
       };
 }

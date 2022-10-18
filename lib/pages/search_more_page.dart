@@ -131,39 +131,42 @@ class SearchMorePage extends StatelessWidget {
                                   color: orangeColor,
                                 ),
                               ):
-                      Expanded(
-                          child: SingleChildScrollView(
-                              controller: builder.scrollController,
-                              physics: const BouncingScrollPhysics(),
-                              child: Column(children: [
-                                Wrap(
-                                    direction: Axis.horizontal,
-                                    spacing: 2,
-                                    runSpacing: 2,
-                                    children: List.generate(
-                                        builder.model.results!.length, (index) {
-                                      return GestureDetector(
-                                        onTap: () =>builder.navToDetale(),
-                                        child: ImageNetwork(
-                                          borderWidth: 2,
-                                          borderColor: orangeColor,
-                                          rating: builder
-                                              .model.results?[index].voteAverage
-                                              .toString(),
-                                          link: imagebase +
-                                              (builder.model.results?[index]
-                                                      .posterPath)
-                                                  .toString(),
-                                          height: constraints.maxHeight * 0.3,
-                                          width: constraints.maxWidth * 0.329,
-                                          isMovie: true,
-                                          isShadow: false,
-                                          color: orangeColor,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      );
-                                    }))
-                              ])));
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Expanded(
+                            child: SingleChildScrollView(
+                                controller: builder.scrollController,
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(children: [
+                                  Wrap(
+                                      direction: Axis.horizontal,
+                                      spacing: 2,
+                                      runSpacing: 2,
+                                      children: List.generate(
+                                          builder.model.results!.length, (index) {
+                                        return GestureDetector(
+                                          onTap: () =>builder.navToDetale(builder.model.results![index]),
+                                          child: ImageNetwork(
+                                            borderWidth: 2,
+                                            borderColor: orangeColor,
+                                            rating: builder
+                                                .model.results?[index].voteAverage
+                                                .toString(),
+                                            link: imagebase +
+                                                (builder.model.results?[index]
+                                                        .posterPath)
+                                                    .toString(),
+                                            height: constraints.maxHeight * 0.3,
+                                            width: constraints.maxWidth * 0.323,
+                                            isMovie: true,
+                                            isShadow: false,
+                                            color: orangeColor,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        );
+                                      }))
+                                ]))),
+                      );
 
           //  return
 

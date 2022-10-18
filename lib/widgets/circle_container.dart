@@ -69,9 +69,9 @@ class CircleContainer extends StatelessWidget {
                       boxShadow: [
                         shadow == true
                             ? BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 2.5,
+                                blurRadius: 6,
                                 offset: const Offset(0, 3),
                               )
                             : const BoxShadow()
@@ -90,8 +90,9 @@ class CircleContainer extends StatelessWidget {
                 SizedBox(
                   height: topSpacing ?? 0.0,
                 ),
-                name != null
-                    ? CustomText(
+                name != null?
+                name==''?Container():
+                    CustomText(
                         align: TextAlign.center,
                         text: name,
                         size: nameSize,
@@ -109,13 +110,12 @@ class CircleContainer extends StatelessWidget {
                         color: charColor,
                         flow: flow,
                         maxline: charMax,
-                        weight: weight,
                       )
                     : Container()
               ],
             ),
         )
-        : Container(
+        : SizedBox(
           width: width,
           child: Column(
             children: [

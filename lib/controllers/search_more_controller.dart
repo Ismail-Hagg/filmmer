@@ -5,6 +5,7 @@ import '../helper/constants.dart';
 import '../helper/utils.dart';
 import '../models/home_page_model.dart';
 import '../models/move_model.dart';
+import '../models/results_model.dart';
 import '../pages/movie_detale_page.dart';
 import '../services/home_page_service.dart';
 import 'home_controller.dart';
@@ -116,7 +117,8 @@ class SearchMorePageController extends GetxController {
     myFocusNode.requestFocus();
   }
 
-  void navToDetale(){
-    Get.to(()=> MovieDetalePage());
+  void navToDetale(Results res){
+    //Get.to(()=> MovieDetalePage());
+    Get.find<HomeController>().navToDetale(res);
   }
 }
