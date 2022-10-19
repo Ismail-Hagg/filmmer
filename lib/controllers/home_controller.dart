@@ -139,9 +139,60 @@ class HomeController extends GetxController {
     } else {
       _movieDetales = MovieDetaleModel(
         recomendation: RecomendationModel(
-          results: []
+          isError: false,
+          results: [
+            Results(
+              voteAverage: 0.0,
+              id: 0,
+              posterPath: 'assets/images/oscar.jpg'
+            ),
+             Results(
+              voteAverage: 0.0,
+              id: 0,
+              posterPath: 'assets/images/oscar.jpg'
+            ),
+             Results(
+              voteAverage: 0.0,
+              id: 0,
+              posterPath: 'assets/images/oscar.jpg'
+            ),
+             Results(
+              voteAverage: 0.0,
+              id: 0,
+              posterPath: 'assets/images/oscar.jpg'
+            )
+          ]
         ),
-        cast: CastModel(cast: []),
+        cast: CastModel(isError: false, cast: [
+          Cast(
+            profilePath: 'assets/images/oscar.jpg',
+            name: 'Actor',
+            character: 'character',
+            id:0,
+            creditId: '',
+          ),
+          Cast(
+            profilePath: 'assets/images/oscar.jpg',
+            name: 'Actor',
+            character: 'character',
+            id:0,
+            creditId: '',
+          ),
+          Cast(
+            profilePath: 'assets/images/oscar.jpg',
+            name: 'Actor',
+            character: 'character',
+            id:0,
+            creditId: '',
+          ),
+          Cast(
+            profilePath: 'assets/images/oscar.jpg',
+            name: 'Actor',
+            character: 'character',
+            id:0,
+            creditId: '',
+          )
+        ]),
         id: res.id,
         posterPath: res.posterPath,
         overview: res.overview,

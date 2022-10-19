@@ -1,6 +1,6 @@
+import 'package:filmpro/widgets/circle_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/home_controller.dart';
 import '../helper/constants.dart';
 import '../models/home_page_model.dart';
@@ -24,14 +24,13 @@ class ContentScrolling extends StatelessWidget {
   final bool isMovie;
   final bool isShadow;
   final bool isFirstPage;
-  //final bool isCast;
   final String? title;
   final String? link;
   final BoxFit fit;
   final HomePageModel? model;
   final MovieDetaleModel? detales;
   final Function() reload;
-  
+  final bool? isWaiting;
 
   const ContentScrolling(
       {super.key,
@@ -47,7 +46,6 @@ class ContentScrolling extends StatelessWidget {
       required this.isTitle,
       required this.isMovie,
       required this.isShadow,
-      //required this.isCast,
       this.title,
       required this.fit,
       this.model,
@@ -56,7 +54,8 @@ class ContentScrolling extends StatelessWidget {
       required this.textColor,
       required this.isFirstPage,
       required this.height,
-      this.link});
+      this.link,
+      this.isWaiting});
 
   @override
   Widget build(BuildContext context) {
@@ -115,55 +114,94 @@ class ContentScrolling extends StatelessWidget {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: paddingY),
                     child: GestureDetector(
-                      onTap: () {
-                        isFirstPage?
-                        Get.find<HomeController>().navToDetale(model!.results![index]):
-                        isMovie?
-                        Get.find<HomeController>().navToDetale(detales!.recomendation!.results![index]):
-                        Get.find<HomeController>().navToCast();
-
-                      },
-                      child: ImageNetwork(
-                        name: isFirstPage==false? isMovie==false?detales!.cast!.cast![index].name:'':'',
-                        char: isFirstPage==false? isMovie==false?detales!.cast!.cast![index].character:'':'',
-                        nameColor: orangeColor,
-                        charColor: whiteColor,
-                        topSpacing: height * 0.05,
-                        nameSize: pageWidth*0.04,
-                        charSize: pageWidth*0.03,
-                        nameMax: 1,
-                        charMax: 1,
-                        flow: TextOverflow.clip,
-                        align: TextAlign.center,
-                        weight: FontWeight.w600,
-                        borderWidth: borderWidth ?? 0,
-                        borderColor: borderColor ?? Colors.transparent,
-                        rating: isFirstPage
-                            ? model!.results![index].voteAverage.toString()
-                            : isMovie
-                                ? detales!
-                                    .recomendation!.results![index].voteAverage
-                                    .toString()
-                                : '0.0',
-                        link: isFirstPage
-                            ? imagebase +
-                                (model!.results?[index].posterPath).toString()
-                            : isMovie
-                                ? imagebase +
-                                    (detales!.recomendation!.results![index]
-                                            .posterPath)
+                        onTap: () {
+                          isFirstPage
+                              ? Get.find<HomeController>()
+                                  .navToDetale(model!.results![index])
+                              : isMovie
+                                  ? Get.find<HomeController>().navToDetale(
+                                      detales!.recomendation!.results![index])
+                                  : Get.find<HomeController>().navToCast();
+                        },
+                        child: isWaiting == null
+                            ? ImageNetwork(
+                                name: isFirstPage == false
+                                    ? isMovie == false
+                                        ? detales!.cast!.cast![index].name
+                                        : ''
+                                    : '',
+                                char: isFirstPage == false
+                                    ? isMovie == false
+                                        ? detales!.cast!.cast![index].character
+                                        : ''
+                                    : '',
+                                nameColor: orangeColor,
+                                charColor: whiteColor,
+                                topSpacing: height * 0.05,
+                                nameSize: pageWidth * 0.04,
+                                charSize: pageWidth * 0.027,
+                                nameMax: 1,
+                                charMax: 1,
+                                flow: TextOverflow.clip,
+                                align: TextAlign.center,
+                                borderWidth: borderWidth ?? 0,
+                                borderColor: borderColor ?? Colors.transparent,
+                                rating: isFirstPage
+                                    ? model!.results![index].voteAverage
                                         .toString()
-                                : imagebase +
-                                    (detales!.cast!.cast![index].profilePath)
-                                        .toString(),
-                        height: inHeight,
-                        width: inWidth,
-                        isMovie: isMovie,
-                        isShadow: isShadow,
-                        color: color,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                                    : isMovie
+                                        ? detales!.recomendation!
+                                            .results![index].voteAverage
+                                            .toString()
+                                        : '0.0',
+                                link: isFirstPage
+                                    ? imagebase +
+                                        (model!.results?[index].posterPath)
+                                            .toString()
+                                    : isMovie
+                                        ? imagebase +
+                                            (detales!.recomendation!
+                                                    .results![index].posterPath)
+                                                .toString()
+                                        : imagebase +
+                                            (detales!.cast!.cast![index]
+                                                    .profilePath)
+                                                .toString(),
+                                height: inHeight,
+                                width: inWidth,
+                                isMovie: isMovie,
+                                isShadow: isShadow,
+                                color: color,
+                                fit: BoxFit.contain,
+                              )
+                            : isMovie == false
+                                ? CircleContainer(
+                                  fit: fit,
+                                    height: inHeight,
+                                    width: inWidth,
+                                    color: color,
+                                    shadow: false,
+                                    isPicOk: true,
+                                    image: Image.asset(detales!
+                                            .cast!.cast![0].profilePath
+                                            .toString())
+                                        .image,
+                                    name: detales!.cast!.cast![0].name,
+                                    char: detales!.cast!.cast![0].character,
+                                    nameColor: orangeColor,
+                                    charColor: whiteColor,
+                                    topSpacing: height * 0.05,
+                                    nameSize: pageWidth * 0.04,
+                                    charSize: pageWidth * 0.03,
+                                    nameMax: 1,
+                                    charMax: 1,
+                                    flow: TextOverflow.clip,
+                                    align: TextAlign.center,
+                                    weight: FontWeight.w600,
+                                  )
+                                :
+                                Container()
+                                ),
                   );
                 },
               ),

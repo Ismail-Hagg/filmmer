@@ -43,11 +43,13 @@ dependencies:
   get_storage: ^2.0.3
   google_sign_in: ^5.4.2
   http: ^0.13.5
+  like_button: ^2.0.5
   shape_of_view_null_safe: ^2.0.0
   shared_preferences: ^2.0.15
   shimmer: ^2.0.0
   simple_gradient_text: ^1.2.4
   sms_autofill: ^2.2.0
+  sqflite: ^2.1.0+1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -68,6 +70,7 @@ flutter:
     - assets/images/google_logo.png
     - assets/images/google.svg
     - assets/images/no_image.png
+    - assets/images/oscar.jpg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
