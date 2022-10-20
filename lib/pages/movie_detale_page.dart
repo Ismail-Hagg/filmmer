@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:filmpro/controllers/home_controller.dart';
-import 'package:filmpro/models/cast_model.dart';
-import 'package:filmpro/models/recomendation_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:filmpro/widgets/circle_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shape_of_view_null_safe/shape_of_view_null_safe.dart';
@@ -10,80 +9,18 @@ import 'package:shimmer/shimmer.dart';
 import '../controllers/movie_detale_controller.dart';
 import '../helper/constants.dart';
 import '../helper/countries.dart';
-import '../models/movie_deltale_model.dart';
-import '../widgets/circle_container.dart';
+import '../helper/utils.dart';
 import '../widgets/content_scrolll.dart';
 import '../widgets/custom_text.dart';
+import '../widgets/network_image.dart';
 
 class MovieDetalePage extends StatelessWidget {
   MovieDetalePage({Key? key}) : super(key: key);
 
-  List<String> lst = [
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/grsIJAo7a37SAVl3La5aaUFpVla.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/jZhHfPt9HUyVdXuTvGLlcnympE5.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/wr9Q5IiRpKl10IuJhDmC7QXDuqz.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/sglKcvdU3e8hTy1kOghEbT0GdHS.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/iY6ZIEoi7awz69CzvkOgN0YB05l.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/fF740MIubP6IBGeS80KMmELnHCi.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/lLLLqscRNnbFC7GQNqYIQ5WsoCJ.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/8vxcFlUeIwNH0uIoZq34uagaLAr.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/1qOHNQerubLL28fkAX2swY9bAIz.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/bXYxZkchxjozc8gPiImMOouG2ZA.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/oU53nWLQ6wFHzERwSi1fD53LxZB.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/grsIJAo7a37SAVl3La5aaUFpVla.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/jZhHfPt9HUyVdXuTvGLlcnympE5.jpg',
-    'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/8vxcFlUeIwNH0uIoZq34uagaLAr.jpg',
-  ];
-  MovieDetaleModel thing = MovieDetaleModel(
-      recomendation: RecomendationModel(
-          results: Get.find<HomeController>().popularMovies.results),
-      isError: false,
-      cast: CastModel(cast: [
-        Cast(
-          id: 5,
-          name: 'thing',
-          profilePath:
-              'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/grsIJAo7a37SAVl3La5aaUFpVla.jpg',
-          character: 'thing',
-          creditId: '',
-        ),
-        Cast(
-          id: 5,
-          name: 'boy',
-          profilePath:
-              'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/wr9Q5IiRpKl10IuJhDmC7QXDuqz.jpg',
-          character: 'bou',
-          creditId: '',
-        ),
-        Cast(
-          id: 5,
-          name: 'indigo',
-          profilePath:
-              'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/grsIJAo7a37SAVl3La5aaUFpVla.jpg',
-          character: 'night',
-          creditId: '',
-        ),
-        Cast(
-          id: 5,
-          name: 'man',
-          profilePath:
-              'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/jZhHfPt9HUyVdXuTvGLlcnympE5.jpg',
-          character: 'man',
-          creditId: '',
-        ),
-        Cast(
-          id: 5,
-          name: 'tom',
-          profilePath:
-              'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/8vxcFlUeIwNH0uIoZq34uagaLAr.jpg',
-          character: 'tom',
-          creditId: '',
-        )
-      ]));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //resizeToAvoidBottomInset: false,
       backgroundColor: secondaryColor,
       body: GetBuilder<MovieDetaleController>(
         init: Get.put(MovieDetaleController()),
@@ -146,7 +83,7 @@ class MovieDetalePage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           elevation: 12,
                           onPressed: () {
-                             controller.queryAll();
+                            controller.queryAll();
                           },
                           shape: const CircleBorder(),
                           fillColor: whiteColor,
@@ -170,8 +107,7 @@ class MovieDetalePage extends StatelessWidget {
                                     splashRadius: 15,
                                     icon: Icon(Icons.add,
                                         color: orangeColor, size: width * 0.08),
-                                    //onPressed: () => controller.watch()),
-                                    onPressed: () {}),
+                                    onPressed: () => controller.watch()),
                                 CustomText(
                                   text: controller.model.isError == true
                                       ? '0.0'
@@ -205,7 +141,8 @@ class MovieDetalePage extends StatelessWidget {
                                     onTap: () => controller.favouriteUpload(),
                                     child: controller.heart == 0
                                         ? Icon(Icons.favorite_outline,
-                                            color: whiteColor, size: width * 0.08)
+                                            color: whiteColor,
+                                            size: width * 0.08)
                                         : Icon(Icons.favorite,
                                             color: orangeColor,
                                             size: width * 0.08),
@@ -340,15 +277,13 @@ class MovieDetalePage extends StatelessWidget {
                                     CustomText(
                                       text: controller.model.isError == false
                                           ? controller.model.isShow == false
-                                              ? controller.getTimeString(
-                                                  controller.model.runtime
-                                                      as int)
+                                              ? getTimeString(controller
+                                                  .model.runtime as int)
                                               : controller.model.runtime
                                                   .toString()
                                           : controller.backUp.isShow == false
-                                              ? controller.getTimeString(
-                                                  controller.backUp.runtime
-                                                      as int)
+                                              ? getTimeString(controller
+                                                  .backUp.runtime as int)
                                               : controller.backUp.runtime
                                                   .toString(),
                                       color: orangeColor,
@@ -382,7 +317,7 @@ class MovieDetalePage extends StatelessWidget {
                               inWidth: constraints.maxHeight * 0.12,
                               paddingY: 4,
                               pageWidth: constraints.maxWidth,
-                              isError: thing.isError as bool,
+                              isError: false,
                               isArrow: false,
                               isTitle: true,
                               isMovie: false,
@@ -402,7 +337,7 @@ class MovieDetalePage extends StatelessWidget {
                               inWidth: constraints.maxHeight * 0.12,
                               paddingY: 4,
                               pageWidth: constraints.maxWidth,
-                              isError: thing.isError as bool,
+                              isError: false,
                               isArrow: false,
                               isTitle: true,
                               isMovie: false,
@@ -445,7 +380,7 @@ class MovieDetalePage extends StatelessWidget {
                                   paddingY: 4,
                                   pageWidth: constraints.maxWidth,
                                   borderWidth: 2,
-                                  isError: thing.isError as bool,
+                                  isError: false,
                                   isArrow: false,
                                   isTitle: true,
                                   isMovie: true,
@@ -459,16 +394,335 @@ class MovieDetalePage extends StatelessWidget {
                                   height: constraints.maxHeight * 0.3,
                                 )
                               : Container()
+                      : Container(),
+                  controller.model.isError == false
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                      child: TextField(
+                                    controller: controller.txtControlller,
+                                    focusNode: controller.myFocusNode,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    cursorColor: orangeColor,
+                                    style: TextStyle(
+                                        color: orangeColor,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.04),
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'comments'.tr,
+                                      hintStyle: const TextStyle(
+                                        color: orangeColor,
+                                      ),
+                                    ),
+                                  )),
+                                  controller.commentLoader == 0
+                                      ? IconButton(
+                                          splashRadius: 15,
+                                          icon: Icon(Icons.send,
+                                              color: orangeColor,
+                                              size: width * 0.06),
+                                          onPressed: () =>
+                                              controller.uploadComment(
+                                                  controller.model.id
+                                                      .toString(),
+                                                  controller.txtControlller.text
+                                                      .trim()))
+                                      : const Center(
+                                          child: CircularProgressIndicator(
+                                              color: orangeColor),
+                                        ),
+                                ],
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Divider(
+                                color: orangeColor,
+                                height: 2,
+                              ),
+                            ),
+                            StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Comments')
+                                    .doc(controller.model.id.toString())
+                                    .collection('Comments')
+                                    .orderBy('timeStamp', descending: true)
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: orangeColor,
+                                      ),
+                                    );
+                                  }
+                                  return Column(
+                                      children: List.generate(
+                                          snapshot.data!.docs.length,
+                                          (index) => Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: secondaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                        color: mainColor,
+                                                        spreadRadius: 5,
+                                                        blurRadius: 7,
+                                                        offset: Offset(0, 0),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      SizedBox(
+                                                        width:
+                                                            (width - 16) * 0.2,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'isPicOnline'] ==
+                                                                  true
+                                                              ? ImageNetwork(
+                                                                  link: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]['pic'],
+                                                                  height: (width -
+                                                                          16) *
+                                                                      0.165,
+                                                                  width: (width -
+                                                                          16) *
+                                                                      0.165,
+                                                                  color:
+                                                                      secondaryColor,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  borderColor:
+                                                                      orangeColor,
+                                                                  borderWidth:
+                                                                      1,
+                                                                  isMovie:
+                                                                      false,
+                                                                  isShadow:
+                                                                      false,
+                                                                )
+                                                              : CircleContainer(
+                                                                  height: (width -
+                                                                          16) *
+                                                                      0.165,
+                                                                  width: (width -
+                                                                          16) *
+                                                                      0.165,
+                                                                  color:
+                                                                      mainColor,
+                                                                  shadow: false,
+                                                                  icon: Icons
+                                                                      .person,
+                                                                  iconColor:
+                                                                      orangeColor,
+                                                                  borderWidth:
+                                                                      1,
+                                                                  borderColor:
+                                                                      orangeColor,
+                                                                  isPicOk:
+                                                                      false,
+                                                                ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            (width - 16) * 0.8,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  RichText(
+                                                                    text: TextSpan(
+                                                                        children: [
+                                                                          TextSpan(
+                                                                              text: snapshot.data!.docs[index]['userName'],
+                                                                              style: TextStyle(color: orangeColor, fontSize: width * 0.045, overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)),
+                                                                          const TextSpan(
+                                                                              text: '  .  ',
+                                                                              style: TextStyle(
+                                                                                color: orangeColor,
+                                                                              )),
+                                                                          TextSpan(
+                                                                              text: timeAgo(snapshot.data!.docs[index]['timeStamp'].toDate()),
+                                                                              style: TextStyle(
+                                                                                color: orangeColor,
+                                                                                fontSize: width * 0.037,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                              ))
+                                                                        ]),
+                                                                  ),
+                                                                   snapshot.data!.docs[index]
+                                                                              [
+                                                                              'userId'] ==
+                                                                          controller
+                                                                              .userModel
+                                                                              .userId
+                                                                      ? IconButton(
+                                                                          splashRadius:
+                                                                              15,
+                                                                          icon: Icon(Icons.delete,
+                                                                              color:
+                                                                                  orangeColor,
+                                                                              size: width *
+                                                                                  0.06),
+                                                                          onPressed: () => controller.deleteComment(controller.model.id.toString(), snapshot.data!.docs[index].id))
+                                                                      : Container(),
+                                                                ],
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        12.0),
+                                                                child:
+                                                                    CustomText(
+                                                                  text: snapshot
+                                                                          .data!
+                                                                          .docs[index]
+                                                                      [
+                                                                      'comment'],
+                                                                  color:
+                                                                      whiteColor,
+                                                                  size: width *
+                                                                      0.045,
+                                                                ),
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          print(controller
+                                                                              .uuid
+                                                                              .v4());
+                                                                        },
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .thumb_up,
+                                                                            color:
+                                                                                orangeColor,
+                                                                            size:
+                                                                                width * 0.06),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 8.0),
+                                                                        child:
+                                                                            CustomText(
+                                                                          text: snapshot
+                                                                              .data!
+                                                                              .docs[index]['likeCount']
+                                                                              .toString(),
+                                                                          color:
+                                                                              whiteColor,
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: width *
+                                                                            0.03,
+                                                                      ),
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {},
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .thumb_down,
+                                                                            color:
+                                                                                whiteColor,
+                                                                            size:
+                                                                                width * 0.06),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 8.0),
+                                                                        child:
+                                                                            CustomText(
+                                                                          text: snapshot
+                                                                              .data!
+                                                                              .docs[index]['dislikeCount']
+                                                                              .toString(),
+                                                                          color:
+                                                                              whiteColor,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                              index]
+                                                                              [
+                                                                              'subComments']
+                                                                          .isNotEmpty
+                                                                      ? Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.symmetric(vertical: 8.0),
+                                                                          child: TextButton(
+                                                                              style: TextButton.styleFrom(
+                                                                                foregroundColor: orangeColor,
+                                                                              ),
+                                                                              onPressed: () {},
+                                                                              child: CustomText(text: 'view ${snapshot.data!.docs[index]['subComments'].length} replies', color: orangeColor, size: width * 0.037)),
+                                                                        )
+                                                                      : Container()
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )));
+                                }),
+                          ],
+                        )
                       : Container()
-                  // for the actors check if there's data first or show an empty container
-                  // ContentScroll(
-                  //   paddingY: 8,
-                  //   title:'Cast',
-                  //   size:50,
-                  //   color: mainColor,
-                  //   iconSize: 30,
-                  //   height: height * 0.2,
-                  // )
                 ],
               ),
             ),

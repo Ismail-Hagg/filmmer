@@ -204,6 +204,9 @@ class HomeController extends GetxController {
         genres: null,
         releaseDate: res.releaseDate,
       );
+      if (Get.isRegistered<MovieDetaleController>() == true) {
+          Get.find<MovieDetaleController>().myFocusNode.unfocus();
+        }
       Get.create(() => (MovieDetaleController()), permanent: false);
       Get.to(() => MovieDetalePage(), preventDuplicates: false);
     }

@@ -8,7 +8,7 @@ class FirebaseSend {
   bool isShow;
   String releaseDate;
   String id;
-  String time;
+  DateTime time;
   List<dynamic> genres;
   FirebaseSend({
     required this.posterPath,
@@ -45,7 +45,7 @@ class FirebaseSend {
       'isShow': isShow==true?1:0,
       'releaseDate': releaseDate,
       'id': id,
-      'time':time,
+      'time':time.toString(),
       'genres': genres.join(","),
     };
   }
@@ -58,7 +58,7 @@ class FirebaseSend {
       isShow: map['isShow']==1?true:false,
       releaseDate: map['releaseDate'] as String,
       id: map['id'] as String,
-      time: map['time'] ,
+      time: DateTime.parse(map['time']) ,
       genres: map['genres'].split(',')
     );
  }
