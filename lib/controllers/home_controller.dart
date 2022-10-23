@@ -22,29 +22,32 @@ class HomeController extends GetxController {
   Move get move => _move;
   UserModel get model => _model;
   UserModel _model = UserModel(
-      userName: '',
-      email: '',
-      gender: '',
-      onlinePicPath: '',
-      localPicPath: '',
-      userId: '',
-      bio: '',
-      birthday: {},
-      isPicLocal: false,
-      language: Get.deviceLocale.toString(),
-      isDarkTheme: false,
-      isError: true,
-      phoneNumber: '',
-      isSocial: false,
-      messagingToken: '',
-      headAuth: '',
-      headOther: '');
+    userName: '',
+    email: '',
+    gender: '',
+    onlinePicPath: '',
+    localPicPath: '',
+    userId: '',
+    bio: '',
+    birthday: {},
+    isPicLocal: false,
+    language: Get.deviceLocale.toString(),
+    isDarkTheme: false,
+    isError: true,
+    phoneNumber: '',
+    isSocial: false,
+    messagingToken: '',
+    headAuth: '',
+    headOther: '',
+    commentLikes: '',
+    commentsDislikes: '',
+  );
 
-  HomePageModel _upcomingMovies = HomePageModel(results: [],isError: false);
-  HomePageModel _popularMovies = HomePageModel(results: [],isError: false);
-  HomePageModel _popularShows = HomePageModel(results: [],isError: false);
-  HomePageModel _topMovies = HomePageModel(results: [],isError: false);
-  HomePageModel _topShows = HomePageModel(results: [],isError: false);
+  HomePageModel _upcomingMovies = HomePageModel(results: [], isError: false);
+  HomePageModel _popularMovies = HomePageModel(results: [], isError: false);
+  HomePageModel _popularShows = HomePageModel(results: [], isError: false);
+  HomePageModel _topMovies = HomePageModel(results: [], isError: false);
+  HomePageModel _topShows = HomePageModel(results: [], isError: false);
   MovieDetaleModel _movieDetales = MovieDetaleModel();
 
   HomePageModel get upcomingMovies => _upcomingMovies;
@@ -79,10 +82,10 @@ class HomeController extends GetxController {
     count.value = 1;
     for (var i = 0; i < urls.length; i++) {
       await HomePageService().getHomeInfo(urls[i], lan).then((value) => {
-        
             if (i == 0)
               {
                 _upcomingMovies = value,
+                print(_upcomingMovies.errorMessage)
               }
             else if (i == 1)
               {
@@ -138,58 +141,43 @@ class HomeController extends GetxController {
       navToCast();
     } else {
       _movieDetales = MovieDetaleModel(
-        recomendation: RecomendationModel(
-          isError: false,
-          results: [
-            Results(
-              voteAverage: 0.0,
-              id: 0,
-              posterPath: 'assets/images/oscar.jpg'
-            ),
-             Results(
-              voteAverage: 0.0,
-              id: 0,
-              posterPath: 'assets/images/oscar.jpg'
-            ),
-             Results(
-              voteAverage: 0.0,
-              id: 0,
-              posterPath: 'assets/images/oscar.jpg'
-            ),
-             Results(
-              voteAverage: 0.0,
-              id: 0,
-              posterPath: 'assets/images/oscar.jpg'
-            )
-          ]
-        ),
+        recomendation: RecomendationModel(isError: false, results: [
+          Results(
+              voteAverage: 0.0, id: 0, posterPath: 'assets/images/oscar.jpg'),
+          Results(
+              voteAverage: 0.0, id: 0, posterPath: 'assets/images/oscar.jpg'),
+          Results(
+              voteAverage: 0.0, id: 0, posterPath: 'assets/images/oscar.jpg'),
+          Results(
+              voteAverage: 0.0, id: 0, posterPath: 'assets/images/oscar.jpg')
+        ]),
         cast: CastModel(isError: false, cast: [
           Cast(
             profilePath: 'assets/images/oscar.jpg',
             name: 'Actor',
             character: 'character',
-            id:0,
+            id: 0,
             creditId: '',
           ),
           Cast(
             profilePath: 'assets/images/oscar.jpg',
             name: 'Actor',
             character: 'character',
-            id:0,
+            id: 0,
             creditId: '',
           ),
           Cast(
             profilePath: 'assets/images/oscar.jpg',
             name: 'Actor',
             character: 'character',
-            id:0,
+            id: 0,
             creditId: '',
           ),
           Cast(
             profilePath: 'assets/images/oscar.jpg',
             name: 'Actor',
             character: 'character',
-            id:0,
+            id: 0,
             creditId: '',
           )
         ]),
@@ -205,17 +193,15 @@ class HomeController extends GetxController {
         releaseDate: res.releaseDate,
       );
       if (Get.isRegistered<MovieDetaleController>() == true) {
-          Get.find<MovieDetaleController>().myFocusNode.unfocus();
-        }
+        Get.find<MovieDetaleController>().myFocusNode.unfocus();
+      }
       Get.create(() => (MovieDetaleController()), permanent: false);
       Get.to(() => MovieDetalePage(), preventDuplicates: false);
     }
   }
 
   // navigate to cast member page
-  void navToCast(){
+  void navToCast() {
     print('Navigate to cast member page');
   }
-
-
 }

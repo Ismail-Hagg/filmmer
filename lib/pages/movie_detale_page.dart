@@ -10,6 +10,8 @@ import '../controllers/movie_detale_controller.dart';
 import '../helper/constants.dart';
 import '../helper/countries.dart';
 import '../helper/utils.dart';
+import '../models/comment_model.dart';
+import '../widgets/comments_widget.dart';
 import '../widgets/content_scrolll.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/network_image.dart';
@@ -28,7 +30,8 @@ class MovieDetalePage extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           var height = constraints.maxHeight;
           var width = constraints.maxWidth;
-          return SingleChildScrollView(
+          return SingleChildScrollView( 
+            physics: const BouncingScrollPhysics(),
             child: GetBuilder<MovieDetaleController>(
               init: Get.put(MovieDetaleController()),
               builder: (controller) => Column(
@@ -83,7 +86,7 @@ class MovieDetalePage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           elevation: 12,
                           onPressed: () {
-                            controller.queryAll();
+                            //controller.commemtCount(controller.userModel.userId);
                           },
                           shape: const CircleBorder(),
                           fillColor: whiteColor,
@@ -467,258 +470,36 @@ class MovieDetalePage extends StatelessWidget {
                                       ),
                                     );
                                   }
+                                  controller.modelComments(snapshot.data!.docs);
                                   return Column(
                                       children: List.generate(
-                                          snapshot.data!.docs.length,
-                                          (index) => Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: secondaryColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                    boxShadow: const [
-                                                      BoxShadow(
-                                                        color: mainColor,
-                                                        spreadRadius: 5,
-                                                        blurRadius: 7,
-                                                        offset: Offset(0, 0),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width:
-                                                            (width - 16) * 0.2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: snapshot.data!
-                                                                              .docs[
-                                                                          index]
-                                                                      [
-                                                                      'isPicOnline'] ==
-                                                                  true
-                                                              ? ImageNetwork(
-                                                                  link: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]['pic'],
-                                                                  height: (width -
-                                                                          16) *
-                                                                      0.165,
-                                                                  width: (width -
-                                                                          16) *
-                                                                      0.165,
-                                                                  color:
-                                                                      secondaryColor,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  borderColor:
-                                                                      orangeColor,
-                                                                  borderWidth:
-                                                                      1,
-                                                                  isMovie:
-                                                                      false,
-                                                                  isShadow:
-                                                                      false,
-                                                                )
-                                                              : CircleContainer(
-                                                                  height: (width -
-                                                                          16) *
-                                                                      0.165,
-                                                                  width: (width -
-                                                                          16) *
-                                                                      0.165,
-                                                                  color:
-                                                                      mainColor,
-                                                                  shadow: false,
-                                                                  icon: Icons
-                                                                      .person,
-                                                                  iconColor:
-                                                                      orangeColor,
-                                                                  borderWidth:
-                                                                      1,
-                                                                  borderColor:
-                                                                      orangeColor,
-                                                                  isPicOk:
-                                                                      false,
-                                                                ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            (width - 16) * 0.8,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  RichText(
-                                                                    text: TextSpan(
-                                                                        children: [
-                                                                          TextSpan(
-                                                                              text: snapshot.data!.docs[index]['userName'],
-                                                                              style: TextStyle(color: orangeColor, fontSize: width * 0.045, overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)),
-                                                                          const TextSpan(
-                                                                              text: '  .  ',
-                                                                              style: TextStyle(
-                                                                                color: orangeColor,
-                                                                              )),
-                                                                          TextSpan(
-                                                                              text: timeAgo(snapshot.data!.docs[index]['timeStamp'].toDate()),
-                                                                              style: TextStyle(
-                                                                                color: orangeColor,
-                                                                                fontSize: width * 0.037,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                              ))
-                                                                        ]),
-                                                                  ),
-                                                                   snapshot.data!.docs[index]
-                                                                              [
-                                                                              'userId'] ==
-                                                                          controller
-                                                                              .userModel
-                                                                              .userId
-                                                                      ? IconButton(
-                                                                          splashRadius:
-                                                                              15,
-                                                                          icon: Icon(Icons.delete,
-                                                                              color:
-                                                                                  orangeColor,
-                                                                              size: width *
-                                                                                  0.06),
-                                                                          onPressed: () => controller.deleteComment(controller.model.id.toString(), snapshot.data!.docs[index].id))
-                                                                      : Container(),
-                                                                ],
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    vertical:
-                                                                        12.0),
-                                                                child:
-                                                                    CustomText(
-                                                                  text: snapshot
-                                                                          .data!
-                                                                          .docs[index]
-                                                                      [
-                                                                      'comment'],
-                                                                  color:
-                                                                      whiteColor,
-                                                                  size: width *
-                                                                      0.045,
-                                                                ),
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () {
-                                                                          print(controller
-                                                                              .uuid
-                                                                              .v4());
-                                                                        },
-                                                                        child: Icon(
-                                                                            Icons
-                                                                                .thumb_up,
-                                                                            color:
-                                                                                orangeColor,
-                                                                            size:
-                                                                                width * 0.06),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.symmetric(horizontal: 8.0),
-                                                                        child:
-                                                                            CustomText(
-                                                                          text: snapshot
-                                                                              .data!
-                                                                              .docs[index]['likeCount']
-                                                                              .toString(),
-                                                                          color:
-                                                                              whiteColor,
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width: width *
-                                                                            0.03,
-                                                                      ),
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () {},
-                                                                        child: Icon(
-                                                                            Icons
-                                                                                .thumb_down,
-                                                                            color:
-                                                                                whiteColor,
-                                                                            size:
-                                                                                width * 0.06),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.symmetric(horizontal: 8.0),
-                                                                        child:
-                                                                            CustomText(
-                                                                          text: snapshot
-                                                                              .data!
-                                                                              .docs[index]['dislikeCount']
-                                                                              .toString(),
-                                                                          color:
-                                                                              whiteColor,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                              index]
-                                                                              [
-                                                                              'subComments']
-                                                                          .isNotEmpty
-                                                                      ? Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.symmetric(vertical: 8.0),
-                                                                          child: TextButton(
-                                                                              style: TextButton.styleFrom(
-                                                                                foregroundColor: orangeColor,
-                                                                              ),
-                                                                              onPressed: () {},
-                                                                              child: CustomText(text: 'view ${snapshot.data!.docs[index]['subComments'].length} replies', color: orangeColor, size: width * 0.037)),
-                                                                        )
-                                                                      : Container()
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )));
+                                          controller.commentsList.length,
+                                          (index) => Comments(
+                                              width: width,
+                                              comment: controller
+                                                  .commentsList[index],
+                                              like: () => controller.likeSystem(
+                                                  true,
+                                                  controller.commentsList[index]
+                                                      .postId,
+                                                  controller.model.id
+                                                      .toString(),
+                                                  snapshot.data!.docs[index].id,
+                                                  controller.commentsList[index]
+                                                      .likeCount),
+                                              delete: () =>
+                                                  controller.deleteComment(
+                                                      controller.model.id
+                                                          .toString(),
+                                                      snapshot.data!.docs[index]
+                                                          .id),
+                                              nav: () => controller.navToSubComment(
+                                                  controller.model.id
+                                                      .toString(),
+                                                  controller.commentsList[index]
+                                                      .postId,
+                                                  snapshot.data!.docs[index].id),
+                                              disLike: () => controller.likeSystem(false, controller.commentsList[index].postId, controller.model.id.toString(), snapshot.data!.docs[index].id, controller.commentsList[index].dislikeCount))));
                                 }),
                           ],
                         )

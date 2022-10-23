@@ -10,6 +10,7 @@ class UserDataPref {
       UserModel model = await _getUserData();
       return model;
     } catch (e) {
+      print(e.toString());
       return UserModel(
           birthday: {},
           bio: '',
@@ -27,7 +28,9 @@ class UserDataPref {
           userId: '',
           userName: 'Username',
           headAuth: '',
-          headOther: ''
+          headOther: '',
+          commentLikes: '',
+      commentsDislikes: '',
           );
     }
   }

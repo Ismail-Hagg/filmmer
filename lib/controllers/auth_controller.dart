@@ -150,9 +150,10 @@ class AuthController extends GetxController {
                         else
                           {
                             // logged with a google account before
+                            print(value.data() as Map<dynamic, dynamic>),
                             saveDataLocal(UserModel.fromMap(
                                 value.data() as Map<dynamic, dynamic>)),
-                             getDocs(user.user!.uid),
+                            getDocs(user.user!.uid),
                             Get.offAll(() => const ControllerPage()),
                             count.value = 0
                           }
@@ -222,7 +223,7 @@ class AuthController extends GetxController {
                     .then((value) async {
                   saveDataLocal(
                       UserModel.fromMap(value.data() as Map<dynamic, dynamic>));
-                   getDocs(user.user!.uid);
+                  getDocs(user.user!.uid);
                   Get.offAll(() => const ControllerPage());
                   count.value = 0;
                 }).catchError((e) {
@@ -244,12 +245,9 @@ class AuthController extends GetxController {
     await _auth.signOut();
     await _googleSignIn.signOut();
     Get.offAll(() => const ControllerPage());
-    await dbHelper
-        .deleteAll(DatabaseHelper.showTable);
-    await dbHelper
-        .deleteAll(DatabaseHelper.movieTable);
-    await dbHelper
-        .deleteAll(DatabaseHelper.table);
+    await dbHelper.deleteAll(DatabaseHelper.showTable);
+    await dbHelper.deleteAll(DatabaseHelper.movieTable);
+    await dbHelper.deleteAll(DatabaseHelper.table);
     UserDataPref().deleteUser();
     Get.delete<HomeController>();
   }
@@ -324,6 +322,8 @@ class AuthController extends GetxController {
           userName: _name,
           headAuth: '',
           headOther: '',
+          commentLikes: '',
+          commentsDislikes: '',
         );
     FirestoreService().addUsers(userModel);
     saveDataLocal(userModel);

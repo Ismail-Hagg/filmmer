@@ -15,7 +15,7 @@ class FirestoreService {
 
   // add user data to firebase
   Future<void> addUsers(UserModel model) async {
-    return await _ref.doc().set(model.toMap());
+    return await _ref.doc(model.userId).set(model.toMap());
   }
 
    // add user data to firebase
@@ -26,6 +26,7 @@ class FirestoreService {
   // delete a comment
    Future<void> deleteComment(String movieId,String postId) async {
     return await _comRef.doc(movieId).collection('Comments').doc(postId).delete();
+    
   }
 
   // get the current user's data
@@ -36,6 +37,11 @@ class FirestoreService {
   // update data fields in firebase 
   Future<void> updateData(String uid,String key,String value) async {
     return await _ref.doc(uid).update({key:value});
+  }
+
+  // update data fields in firebase 
+  Future<void> updateCommentData(String movieId,String postId, String key,dynamic value) async {
+    return await _comRef.doc(movieId).collection('Comments').doc(postId).update({key:value});
   }
 
   // upload favorites to firestore

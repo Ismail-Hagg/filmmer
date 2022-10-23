@@ -1,15 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:filmpro/helper/utils.dart';
+import 'package:filmpro/local_storage/user_data_pref.dart';
 import 'package:filmpro/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
-
 import '../helper/constants.dart';
 import '../local_storage/local_database.dart';
 import '../models/comment_model.dart';
 import '../models/fire_upload.dart';
 import '../models/movie_deltale_model.dart';
 import '../models/trailer_model.dart';
+import '../pages/sub_comment_page.dart';
 import '../services/cast_service.dart';
 import '../services/firestore_service.dart';
 import '../services/movie_detale_service.dart';
@@ -20,7 +22,7 @@ import 'home_controller.dart';
 class MovieDetaleController extends GetxController {
   var uuid = const Uuid();
 
-  TextEditingController _txtControlller = TextEditingController();
+  final TextEditingController _txtControlller = TextEditingController();
   TextEditingController get txtControlller => _txtControlller;
 
   CommentModel _commentModel = CommentModel(
@@ -35,9 +37,13 @@ class MovieDetaleController extends GetxController {
       subComments: [],
       timeStamp: DateTime.now(),
       userId: '',
-      userName: '');
+      userName: '',
+      token: '');
 
   CommentModel get commentModel => _commentModel;
+
+  List<CommentModel> _commentsList = [];
+  List<CommentModel>  get commentsList => _commentsList;
 
   final UserModel _userModel = Get.find<HomeController>().model;
   UserModel get userModel => _userModel;
@@ -66,34 +72,13 @@ class MovieDetaleController extends GetxController {
   int _commentLoader = 0;
   int get commentLoader => _commentLoader;
 
-  CommentModel comment = CommentModel(
-      postId: '',
-      comment: 'kfjg;lksfj gfj;klgjkfd g;sd ;gkl ;ff; sh;gouih ;hg ;os',
-      dislikeCount: 3,
-      isSpoilers: false,
-      isSub: false,
-      likeCount: 1,
-      pic:
-          'https://images.unsplash.com/photo-1666214742880-97f4fe5e65fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-      subComments: [
-        CommentModel(
-            postId: '',
-            comment: '',
-            dislikeCount: 6,
-            isPicOnline: true,
-            isSpoilers: false,
-            isSub: true,
-            likeCount: 4,
-            pic: '',
-            subComments: [],
-            timeStamp: DateTime.parse('2021-09-20 11:57:00'),
-            userId: '',
-            userName: '')
-      ],
-      timeStamp: DateTime.parse('2021-09-20 11:57:00'),
-      userId: 'uid',
-      userName: 'userName',
-      isPicOnline: true);
+  String _fireCommentId = '';
+  String get fireCommentId => _fireCommentId;
+
+  String _movieIdSub = '';
+  String get movieIdSub => _movieIdSub;
+
+  
 
   @override
   void onInit() {
@@ -155,7 +140,6 @@ class MovieDetaleController extends GetxController {
           await dbHelper
               .insert(fire.toMapLocal(), DatabaseHelper.table)
               .then((value) async {
-            print(value.toString());
             snack('favadd'.tr, '');
             update();
             await FirestoreService().upload(_userModel.userId, fire, 0);
@@ -174,6 +158,17 @@ class MovieDetaleController extends GetxController {
           });
         }
       }
+    }
+  }
+
+  // model the comments in the streambuilder
+  void modelComments(List<QueryDocumentSnapshot<Object?>> lst){
+    _commentsList=[];
+    if(lst.isNotEmpty){
+       for (var i = 0; i < lst.length; i++) {
+      _commentsList.add(CommentModel.fromMap(lst[i].data() as Map<String,dynamic>));
+      lst[i].get('comment');
+    }
     }
   }
 
@@ -221,13 +216,6 @@ class MovieDetaleController extends GetxController {
         });
       }
     }
-  }
-
-  void queryAll() async {
-    //await dbHelper.querySelect(DatabaseHelper.table, _userModel.userId.toString()).then((value) => print(value));
-    await dbHelper
-        .queryAllRows(DatabaseHelper.table)
-        .then((value) => print(value));
   }
 
   // get data from api
@@ -284,20 +272,135 @@ class MovieDetaleController extends GetxController {
           likeCount: 0,
           pic: _userModel.onlinePicPath,
           postId: uuid.v4(),
-          subComments: [],
+          subComments: <Map<String, dynamic>>[],
           timeStamp: DateTime.now(),
           userId: _userModel.userId,
-          userName: _userModel.userName);
-      print('done');
+          userName: _userModel.userName,
+          token: _userModel.messagingToken);
       await FirestoreService()
           .addComment(commentModel, movieId, _userModel.userId)
           .then((value) =>
-              {_commentLoader = 0, txtControlller.clear(), update()});
-    }else{txtControlller.clear();}
+              {_commentLoader = 0, txtControlller.clear(),commemtCount(_userModel.userId,'numberOfComments',), update()});
+    } else {
+      txtControlller.clear();
+    }
   }
 
   // delete comments from
-  void deleteComment(String movieId,String postId) async {
-    await FirestoreService().deleteComment(movieId, postId);
+  void deleteComment(String movieId, String postId) async {
+    Get.dialog(
+      AlertDialog(
+        title: Text('deletecomment'.tr),
+        content: Text('deletecommentsure'.tr),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: orangeColor,
+            ),
+            child: Text("answer".tr),
+            onPressed: () async => {
+              Get.back(),
+              await FirestoreService().deleteComment(movieId, postId)
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // likes and dislikes on a comment
+  void likeSystem(bool isLike, String postId, String movieId, String firePostId,int count) async {
+    if (isLike) {
+      var lst = userModel.commentLikes.split(',');
+      var other = userModel.commentsDislikes.split(',');
+      if (lst.contains(postId)) {
+        // there is already a like so remove
+        lst.remove(postId);
+        _userModel.commentLikes = lst.join(',');
+        saveLike(_userModel, 'commentLikes', _userModel.commentLikes, movieId,
+            firePostId, 'likeCount', count - 1);
+      } else {
+        // add a like
+        // first if there's a dislike remove it
+        if (other.contains(postId)) {
+          other.remove(postId);
+          _userModel.commentsDislikes = other.join(',');
+          saveLike(_userModel, 'commentsDislikes', _userModel.commentsDislikes,
+              movieId, firePostId, 'dislikeCount', count - 1);
+          lst.add(postId);
+          _userModel.commentLikes = lst.join(',');
+          saveLike(_userModel, 'commentLikes', _userModel.commentLikes, movieId,
+              firePostId, 'likeCount', count + 1);
+        } else {
+          // add a like
+          lst.add(postId);
+          _userModel.commentLikes = lst.join(',');
+          saveLike(_userModel, 'commentLikes', _userModel.commentLikes, movieId,
+              firePostId, 'likeCount', count + 1);
+
+          // notify user that someone liked his comment
+        }
+      }
+    } else {
+      var lst = userModel.commentsDislikes.split(',');
+      var other = userModel.commentLikes.split(',');
+      if (lst.contains(postId)) {
+        // there is already a dislike so remove
+        lst.remove(postId);
+        _userModel.commentsDislikes = lst.join(',');
+        saveLike(_userModel, 'commentsDislikes', _userModel.commentsDislikes,
+            movieId, firePostId, 'dislikeCount', count - 1);
+      } else {
+        // add a dislike
+        // first if there's a like remove it
+        if (other.contains(postId)) {
+          other.remove(postId);
+          _userModel.commentLikes = other.join(',');
+          saveLike(_userModel, 'commentLikes', _userModel.commentsDislikes,
+              movieId, firePostId, 'likeCount', count + 1);
+          lst.add(postId);
+          _userModel.commentsDislikes = lst.join(',');
+          saveLike(_userModel, 'commentsDislikes', _userModel.commentLikes,
+              movieId, firePostId, 'dislikeCount', count + 1);
+        } else {
+          lst.add(postId);
+          _userModel.commentsDislikes = lst.join(',');
+          saveLike(_userModel, 'commentsDislikes', _userModel.commentLikes,
+              movieId, firePostId, 'dislikeCount', count + 1);
+        }
+      }
+    }
+  }
+
+  void saveLike(UserModel model, String key, String value, String movieId,
+      String firePostId, String otherKey, dynamic otherVal) async {
+    UserDataPref().setUser(model);
+    await FirestoreService()
+        .updateData(model.userId, key, value)
+        .then((value) async => {
+              await FirestoreService()
+                  .updateCommentData(movieId, firePostId, otherKey, otherVal)
+            });
+  }
+
+  // add count of comments or replies to the user data only on firestore
+  void commemtCount(String uid, String key) async {
+    await FirestoreService().getCurrentUser(uid).then((value) async => {
+          if ((value.data() as Map<dynamic, dynamic>)[key] == null)
+            {await FirestoreService().updateData(uid, key, '1')}
+          else
+            {
+              await FirestoreService().updateData(
+                  uid,
+                  key,
+                  (int.parse((value.data() as Map<dynamic, dynamic>)[key]) + 1)
+                      .toString())
+            }
+        });
+  }
+
+  // navigate to subcomment page
+  void navToSubComment(String movieId,String postId,String firePostId){
+    Get.to(()=> SubComment(movieId:movieId,mainPostId: postId,firePostId: firePostId));
   }
 }

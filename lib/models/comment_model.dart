@@ -12,8 +12,9 @@ class CommentModel {
   int dislikeCount;
   bool isSpoilers;
   bool isSub;
-  List<CommentModel> subComments;
+  List<dynamic> subComments;
   bool isPicOnline;
+  String token;
   CommentModel({
     required this.postId,
     required this.pic,
@@ -26,7 +27,8 @@ class CommentModel {
     required this.isSpoilers,
     required this.isSub,
     required this.subComments,
-    required this.isPicOnline
+    required this.isPicOnline,
+    required this.token
   });
   
 
@@ -44,6 +46,7 @@ class CommentModel {
       'isSub': isSub,
       'subComments': subComments,
       'isPicOnline': isPicOnline,
+      'token': token,
     };
   }
 
@@ -53,7 +56,7 @@ class CommentModel {
       pic: map['pic'] as String,
       userName: map['userName'] as String,
       userId: map['userId'] as String,
-      timeStamp: map['timeStamp'],
+      timeStamp: map['timeStamp'].toDate(),
       comment: map['comment'] as String,
       likeCount: map['likeCount'] as int,
       dislikeCount: map['dislikeCount'] as int,
@@ -61,6 +64,7 @@ class CommentModel {
       isSub: map['isSub'] as bool,
       subComments: map['subComments'],
       isPicOnline: map['isPicOnline'] as bool,
+      token: map['token']
     );
   }
 

@@ -73,7 +73,10 @@ class Translation extends Translations {
           'keeping':'Episode Keeping',
           'myaccount':'My Account',
           'genre':'Genre',
-          'comments':'Add a comment'
+          'comments':'Add a comment',
+          'deletecomment':'Delete Comment',
+          'deletecommentsure':'Do you want to delete this comment ?',
+          
         },
         'ar_SA': {
           'Year': 'السنه',
@@ -144,7 +147,9 @@ class Translation extends Translations {
           'keeping':'متابعة الحلقات',
           'myaccount':'حسابي',
           'genre':'تصنيف',
-          'comments':'اضف تعليقك'
+          'comments':'اضف تعليقك',
+          'deletecomment':'حذف التعليق',
+          'deletecommentsure':'هل تريد حذف هذا التعليق ؟'
         }
       };
 }

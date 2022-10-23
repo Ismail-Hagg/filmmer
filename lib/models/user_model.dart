@@ -19,6 +19,8 @@ class UserModel {
    String messagingToken;
    String headAuth;
    String headOther;
+   String commentLikes;
+   String commentsDislikes;
 
   UserModel({
     required this.userName,
@@ -37,7 +39,9 @@ class UserModel {
     required this.isSocial,
     required this.messagingToken,
     required this.headAuth,
-    required this.headOther
+    required this.headOther,
+    required this.commentLikes,
+    required this.commentsDislikes
   });
 
   toMap() {
@@ -59,6 +63,8 @@ class UserModel {
       'messagingToken':messagingToken,
       'headAuth':headAuth,
       'headOther':headOther,
+      'commentLikes':commentLikes,
+      'commentsDislikes':commentsDislikes,
     };
   }
 
@@ -81,6 +87,8 @@ class UserModel {
       messagingToken : map['messagingToken'],
       headAuth : map['headAuth'],
       headOther : map['headOther'],
+      commentLikes : map['commentLikes'],
+      commentsDislikes : map['commentsDislikes'],
     );
   }
 }
