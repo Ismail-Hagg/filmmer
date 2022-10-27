@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import '../helper/constants.dart';
 import '../models/user_model.dart';
+import '../pages/favourites_page.dart';
+import '../pages/watchlist_page.dart';
 import 'circle_container.dart';
 import 'custom_text.dart';
 
@@ -56,11 +58,11 @@ Widget header(double height, double width) {
                             borderColor: orangeColor,
                             color: mainColor,
                             fit: BoxFit.contain,
-                            height: height * 0.17,
+                            height: height * 0.15,
                             isMovie: false,
                             isShadow: false,
                             link: snapshot.data!.onlinePicPath,
-                            width: height * 0.17,
+                            width: height * 0.15,
                           ),
                         )
                       : snapshot.data!.isPicLocal
@@ -78,10 +80,10 @@ Widget header(double height, double width) {
                                   nameColor: milkyColor,
                                   nameSize: width * 0.07,
                                   color: secondaryColor,
-                                  height: height * 0.17,
+                                  height: height * 0.15,
                                   isPicOk: true,
                                   shadow: false,
-                                  width: height * 0.17,
+                                  width: height * 0.15,
                                   image: Image.file(
                                           File(snapshot.data!.localPicPath))
                                       .image),
@@ -90,10 +92,10 @@ Widget header(double height, double width) {
                             padding: EdgeInsets.all(height * 0.01),
                             child: CircleContainer(
                                 color: secondaryColor,
-                                height: height *0.17,
+                                height: height *0.15,
                                 isPicOk: false,
                                 shadow: false,
-                                width: height *0.17,
+                                width: height *0.15,
                                 icon: Icons.person,
                                 iconColor: orangeColor,
                                 borderWidth: 2,
@@ -148,7 +150,7 @@ Widget DrawItems(double height, double width) {
             ),
             onTap: () {
               Get.back();
-             // Get.to(() => WatchList());
+              Get.to(() => WatchlistPage());
             },
           ),
           ListTile(
@@ -159,8 +161,7 @@ Widget DrawItems(double height, double width) {
             ),
             onTap: () {
               Get.back();
-              Get.updateLocale(const Locale('en_US'));
-              //Get.to(() => FavoritesScreen());
+              Get.to(() => FavouritesPage());
             },
           ),
           ListTile(

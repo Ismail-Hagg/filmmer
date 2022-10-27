@@ -195,7 +195,7 @@ class HomeController extends GetxController {
       if (Get.isRegistered<MovieDetaleController>() == true) {
         Get.find<MovieDetaleController>().myFocusNode.unfocus();
       }
-      Get.create(() => (MovieDetaleController()), permanent: false);
+      Get.create(() => (MovieDetaleController()), permanent: true);
       Get.to(() => MovieDetalePage(), preventDuplicates: false);
     }
   }

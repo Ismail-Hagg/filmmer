@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:filmpro/controllers/watchlist_controller.dart';
 import 'package:filmpro/helper/utils.dart';
 import 'package:filmpro/local_storage/user_data_pref.dart';
 import 'package:filmpro/models/user_model.dart';
@@ -17,6 +18,7 @@ import '../services/firestore_service.dart';
 import '../services/movie_detale_service.dart';
 import '../services/recommendation_service.dart';
 import '../services/trailer_service.dart';
+import 'favourites_controller.dart';
 import 'home_controller.dart';
 
 class MovieDetaleController extends GetxController {
@@ -134,9 +136,9 @@ class MovieDetaleController extends GetxController {
           // adding to favourites locally and in firestore
           _heart = 1;
           // checking if we're coming from the favorites page
-          // if (Get.isRegistered<FavoritesController>() == true) {
-          //   Get.find<FavoritesController>().fromDetale(fire, true);
-          // }
+          if (Get.isRegistered<FavouritesController>() == true) {
+            Get.find<FavouritesController>().fromDetale(fire, true);
+          }
           await dbHelper
               .insert(fire.toMapLocal(), DatabaseHelper.table)
               .then((value) async {
@@ -146,9 +148,9 @@ class MovieDetaleController extends GetxController {
           });
         } else {
           _heart = 0;
-          //   if (Get.isRegistered<FavoritesController>() == true) {
-          //   Get.find<FavoritesController>().fromDetale(fire, false);
-          // }
+            if (Get.isRegistered<FavouritesController>() == true) {
+            Get.find<FavouritesController>().fromDetale(fire, false);
+          }
           await dbHelper
               .delete(DatabaseHelper.table, fire.id)
               .then((value) async {
@@ -203,12 +205,12 @@ class MovieDetaleController extends GetxController {
             fire.isShow == true ? show = 'show' : show = 'movie';
 
             await dbHelper.insert(fire.toMapLocal(), table).then((value) async {
-              // if (Get.isRegistered<WatchListController>() == true) {
-              //   Get.find<WatchListController>().fromDetale(fire, fire.isShow);
-              // }
+              if (Get.isRegistered<WatchlistController>() == true) {
+                Get.find<WatchlistController>().fromDetale(fire, fire.isShow);
+              }
               snack('watchadd'.tr, '');
 
-              await FirestoreService().watchList(_userModel.userId, fire, show);
+              await FirestoreService().watchList(_userModel.userId, fire, show,0);
             });
           } else {
             snack('watchalready'.tr, '');
@@ -400,7 +402,7 @@ class MovieDetaleController extends GetxController {
   }
 
   // navigate to subcomment page
-  void navToSubComment(String movieId,String postId,String firePostId){
-    Get.to(()=> SubComment(movieId:movieId,mainPostId: postId,firePostId: firePostId));
+  void navToSubComment(MovieDetaleController controller, String movieId,String postId,String firePostId){
+    Get.to(()=> SubComment(movieId:movieId,mainPostId: postId,firePostId: firePostId,pastController: controller,));
   }
 }

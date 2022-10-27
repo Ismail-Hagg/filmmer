@@ -64,7 +64,7 @@ class CommentModel {
       isSub: map['isSub'] as bool,
       subComments: map['subComments'],
       isPicOnline: map['isPicOnline'] as bool,
-      token: map['token']
+      token: map['token']??''
     );
   }
 

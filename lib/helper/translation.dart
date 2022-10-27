@@ -76,6 +76,10 @@ class Translation extends Translations {
           'comments':'Add a comment',
           'deletecomment':'Delete Comment',
           'deletecommentsure':'Do you want to delete this comment ?',
+          'deletereply':'Do you want to delete this reply ?',
+          'delrep':'Delete reply',
+          'sure':'Are You Sure ?',
+          'delete':'Delete'
           
         },
         'ar_SA': {
@@ -149,7 +153,11 @@ class Translation extends Translations {
           'genre':'تصنيف',
           'comments':'اضف تعليقك',
           'deletecomment':'حذف التعليق',
-          'deletecommentsure':'هل تريد حذف هذا التعليق ؟'
+          'deletecommentsure':'هل تريد حذف هذا التعليق ؟',
+          'deletereply':'هل تريد حذف هذا الرد ؟',
+          'delrep':'حذف الرد',
+          'sure':'هل انت متاكد ؟',
+          'delete':'حذف'
         }
       };
 }

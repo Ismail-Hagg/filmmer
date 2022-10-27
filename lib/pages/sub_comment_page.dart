@@ -2,24 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/movie_detale_controller.dart';
 import '../controllers/sub_comment_controller.dart';
 import '../helper/constants.dart';
 import '../models/comment_model.dart';
 import '../widgets/comments_widget.dart';
 
 class SubComment extends StatelessWidget {
+  final MovieDetaleController pastController;
   final String movieId;
   final String mainPostId;
   final String firePostId;
-  SubComment({Key? key, required this.movieId, required this.mainPostId, required this.firePostId})
+  SubComment(
+      {Key? key,
+      required this.movieId,
+      required this.mainPostId,
+      required this.firePostId, required this.pastController})
       : super(key: key);
-  
-  final SubCommentControllrt controller = Get.put(SubCommentControllrt());
+
+  final SubCommentControllrt controller = Get.put(
+    SubCommentControllrt(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        //resizeToAvoidBottomInset: false,
         backgroundColor: secondaryColor,
         body: SafeArea(
           child: LayoutBuilder(
@@ -42,7 +50,7 @@ class SubComment extends StatelessWidget {
                     ),
                   );
                 }
-                controller.modelComments(snapshot.data!.docs,mainPostId);
+                controller.modelComments(snapshot.data!.docs, mainPostId);
                 return Column(
                   children: [
                     SizedBox(
@@ -52,25 +60,68 @@ class SubComment extends StatelessWidget {
                         child: Column(
                           children: [
                             Comments(
-                                width: width,
-                                comment: controller.mainComment,
-                                like: () {},
-                                delete: () {},
-                                nav: () {},
-                                disLike: () {}),
+                              controller: pastController,
+                              showView: false,
+                              width: width,
+                              comment: controller.mainComment,
+                              like: () => Get.find<MovieDetaleController>()
+                                  .likeSystem(
+                                      true,
+                                      controller.mainComment.postId,
+                                      movieId,
+                                      firePostId,
+                                      controller.mainComment.likeCount),
+                              delete: () => controller.deleteReply(
+                                  controller.mainComment,
+                                  movieId,
+                                  firePostId,
+                                  controller.mainComment.postId,
+                                  controller.mainComment.isSub),
+                              nav: () {},
+                              disLike: () => Get.find<MovieDetaleController>()
+                                  .likeSystem(
+                                      false,
+                                      controller.mainComment.postId,
+                                      movieId,
+                                      firePostId,
+                                      controller.mainComment.dislikeCount),
+                            ),
                             const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0,vertical:16),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 16),
                               child: Divider(color: orangeColor, thickness: 2),
                             ),
                             Column(
-                                children: List.generate(controller.commentsList.length, (index) {
+                                children: List.generate(
+                                    controller.commentsList.length, (index) {
                               return Comments(
+                                controller: pastController,
+                                showView: false,
                                 width: width,
                                 comment: controller.commentsList[index],
-                                like: () {},
-                                delete: () {},
+                                like: () =>controller.subLikeSystem(
+                                  true,
+                                  mainPostId,
+                                  movieId,
+                                  firePostId,
+                                  controller.commentsList,
+                                  index
+                                ),
+                                delete: () => controller.deleteReply(
+                                    controller.mainComment,
+                                    movieId,
+                                    firePostId,
+                                    controller.commentsList[index].postId,
+                                    controller.commentsList[index].isSub),
                                 nav: () {},
-                                disLike: () {},
+                                disLike: () =>controller.subLikeSystem(
+                                  false,
+                                  mainPostId,
+                                  movieId,
+                                  firePostId,
+                                  controller.commentsList,
+                                  index
+                                ),
                               );
                             }))
                           ],
@@ -96,9 +147,7 @@ class SubComment extends StatelessWidget {
                               maxLines: null,
                               cursorColor: orangeColor,
                               style: TextStyle(
-                                  color: orangeColor,
-                                  fontSize:
-                                      width * 0.04),
+                                  color: orangeColor, fontSize: width * 0.04),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'comments'.tr,
@@ -107,29 +156,27 @@ class SubComment extends StatelessWidget {
                                 ),
                               ),
                             )),
-                           GetBuilder(
-                            init:controller,
-                            builder:(thing)=> controller.loader == 0
-                                ?
-                            IconButton(
-                                splashRadius: 15,
-                                icon: Icon(Icons.send,
-                                    color: orangeColor, size: width * 0.06),
-                                onPressed: () {
-                                  controller.uploadReply(
-                                    controller.txtControlller.text
-                                        .trim(),
-                                        movieId, firePostId,controller.mainComment.subComments
-                                        
-                                        );
-                                }
-                                )
-                            :
-                            const Center(
-                                child: CircularProgressIndicator(
-                                    color: orangeColor),
-                              ),
-                           )
+                            GetBuilder(
+                              init: controller,
+                              builder: (thing) => controller.loader == 0
+                                  ? IconButton(
+                                      splashRadius: 15,
+                                      icon: Icon(Icons.send,
+                                          color: orangeColor,
+                                          size: width * 0.06),
+                                      onPressed: () {
+                                        controller.uploadReply(
+                                            controller.txtControlller.text
+                                                .trim(),
+                                            movieId,
+                                            firePostId,
+                                            controller.mainComment.subComments);
+                                      })
+                                  : const Center(
+                                      child: CircularProgressIndicator(
+                                          color: orangeColor),
+                                    ),
+                            )
                           ],
                         ),
                       ),

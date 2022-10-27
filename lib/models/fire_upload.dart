@@ -76,5 +76,6 @@ class FirebaseSend {
       genres: map['genres']
     );
  }
+ 
 }
 

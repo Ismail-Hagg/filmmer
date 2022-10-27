@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/comment_model.dart';
 import '../models/fire_upload.dart';
+import '../models/movie_deltale_model.dart';
 import '../models/user_model.dart';
 
 
@@ -39,6 +40,11 @@ class FirestoreService {
     return await _ref.doc(uid).update({key:value});
   }
 
+  // delete from watchlist or favorites
+  Future<void> delete(String uid, String id, String collection) async {
+    return _ref.doc(uid).collection(collection).doc(id).delete();
+  }
+
   // update data fields in firebase 
   Future<void> updateCommentData(String movieId,String postId, String key,dynamic value) async {
     return await _comRef.doc(movieId).collection('Comments').doc(postId).update({key:value});
@@ -47,13 +53,13 @@ class FirestoreService {
   // upload favorites to firestore
   Future<void> upload(String userId, FirebaseSend fire, int count) async {
     if (count == 1) {
-      return await _ref
+       await _ref
           .doc(userId)
           .collection('Favourites')
           .doc(fire.id)
           .delete();
     } else if (count == 0) {
-      return await _ref
+       await _ref
           .doc(userId)
           .collection('Favourites')
           .doc(fire.id)
@@ -63,11 +69,19 @@ class FirestoreService {
 
   // upload watchList to firestore
   Future<void> watchList(
-      String userId, FirebaseSend fire, String isShow) async {
-    await _ref
+      String userId, FirebaseSend fire, String isShow,int count) async {
+        if (count == 1){
+          await _ref
+          .doc(userId)
+          .collection('${isShow}WatchList')
+          .doc(fire.id)
+          .delete();
+        }else if (count == 0){
+          await _ref
           .doc(userId)
           .collection('${isShow}WatchList')
           .doc(fire.id)
           .set(fire.toMap());
-  }
+        }
+  }   
 }

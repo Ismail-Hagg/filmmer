@@ -116,9 +116,6 @@ class MovieDetalePage extends StatelessWidget {
                                       ? '0.0'
                                       : controller.model.voteAverage!
                                           .toStringAsFixed(1),
-                                  // controller.detales.voteAverage!
-                                  //     .toStringAsFixed(1)
-
                                   color: orangeColor,
                                   size: width * 0.065,
                                 )
@@ -301,6 +298,7 @@ class MovieDetalePage extends StatelessWidget {
                     child: SizedBox(
                       height: height * 0.13,
                       child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
                           child: CustomText(
                         text: controller.model.isError == false
                             ? controller.model.overview.toString()
@@ -470,11 +468,13 @@ class MovieDetalePage extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                  controller.modelComments(snapshot.data!.docs);
+                                  controller.modelComments(snapshot.data!.docs); 
                                   return Column(
                                       children: List.generate(
                                           controller.commentsList.length,
                                           (index) => Comments(
+                                            controller: controller,
+                                            showView: true,
                                               width: width,
                                               comment: controller
                                                   .commentsList[index],
@@ -494,6 +494,7 @@ class MovieDetalePage extends StatelessWidget {
                                                       snapshot.data!.docs[index]
                                                           .id),
                                               nav: () => controller.navToSubComment(
+                                                controller,
                                                   controller.model.id
                                                       .toString(),
                                                   controller.commentsList[index]
