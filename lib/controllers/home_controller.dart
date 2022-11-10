@@ -10,6 +10,7 @@ import '../models/movie_deltale_model.dart';
 import '../models/recomendation_model.dart';
 import '../models/results_model.dart';
 import '../models/user_model.dart';
+import '../pages/actor_page.dart';
 import '../pages/movie_detale_page.dart';
 import '../pages/search_more_page.dart';
 import '../services/firebase_storage_service.dart';
@@ -138,7 +139,7 @@ class HomeController extends GetxController {
   void navToDetale(Results? res) {
     if (res!.mediaType == 'person') {
       // navigate to cast member page
-      navToCast();
+      navToCast(imagebase+res.posterPath.toString(),res.id.toString(),_model.language.toString(),false);
     } else {
       _movieDetales = MovieDetaleModel(
         recomendation: RecomendationModel(isError: false, results: [
@@ -201,7 +202,8 @@ class HomeController extends GetxController {
   }
 
   // navigate to cast member page
-  void navToCast() {
-    print('Navigate to cast member page');
+  void navToCast(String link,String id,String language,bool isShow) {
+    Get.to(() =>ActorPage(link:link,id:id,language: language,isShow:isShow,));
+    //print('Navigate to cast member page');
   }
 }

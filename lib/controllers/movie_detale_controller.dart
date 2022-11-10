@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:filmpro/controllers/watchlist_controller.dart';
 import 'package:filmpro/helper/utils.dart';
@@ -10,14 +11,17 @@ import '../helper/constants.dart';
 import '../local_storage/local_database.dart';
 import '../models/comment_model.dart';
 import '../models/fire_upload.dart';
+import '../models/images_model.dart';
 import '../models/movie_deltale_model.dart';
 import '../models/trailer_model.dart';
 import '../pages/sub_comment_page.dart';
 import '../services/cast_service.dart';
 import '../services/firestore_service.dart';
+import '../services/images_service.dart';
 import '../services/movie_detale_service.dart';
 import '../services/recommendation_service.dart';
 import '../services/trailer_service.dart';
+import '../widgets/network_image.dart';
 import 'favourites_controller.dart';
 import 'home_controller.dart';
 
@@ -45,7 +49,7 @@ class MovieDetaleController extends GetxController {
   CommentModel get commentModel => _commentModel;
 
   List<CommentModel> _commentsList = [];
-  List<CommentModel>  get commentsList => _commentsList;
+  List<CommentModel> get commentsList => _commentsList;
 
   final UserModel _userModel = Get.find<HomeController>().model;
   UserModel get userModel => _userModel;
@@ -74,13 +78,8 @@ class MovieDetaleController extends GetxController {
   int _commentLoader = 0;
   int get commentLoader => _commentLoader;
 
-  String _fireCommentId = '';
-  String get fireCommentId => _fireCommentId;
-
-  String _movieIdSub = '';
-  String get movieIdSub => _movieIdSub;
-
-  
+  final RxInt _imagesCounter = 0.obs;
+  int get imagesCounter => _imagesCounter.value;
 
   @override
   void onInit() {
@@ -148,7 +147,7 @@ class MovieDetaleController extends GetxController {
           });
         } else {
           _heart = 0;
-            if (Get.isRegistered<FavouritesController>() == true) {
+          if (Get.isRegistered<FavouritesController>() == true) {
             Get.find<FavouritesController>().fromDetale(fire, false);
           }
           await dbHelper
@@ -164,13 +163,14 @@ class MovieDetaleController extends GetxController {
   }
 
   // model the comments in the streambuilder
-  void modelComments(List<QueryDocumentSnapshot<Object?>> lst){
-    _commentsList=[];
-    if(lst.isNotEmpty){
-       for (var i = 0; i < lst.length; i++) {
-      _commentsList.add(CommentModel.fromMap(lst[i].data() as Map<String,dynamic>));
-      lst[i].get('comment');
-    }
+  void modelComments(List<QueryDocumentSnapshot<Object?>> lst) {
+    _commentsList = [];
+    if (lst.isNotEmpty) {
+      for (var i = 0; i < lst.length; i++) {
+        _commentsList
+            .add(CommentModel.fromMap(lst[i].data() as Map<String, dynamic>));
+        lst[i].get('comment');
+      }
     }
   }
 
@@ -210,7 +210,8 @@ class MovieDetaleController extends GetxController {
               }
               snack('watchadd'.tr, '');
 
-              await FirestoreService().watchList(_userModel.userId, fire, show,0);
+              await FirestoreService()
+                  .watchList(_userModel.userId, fire, show, 0);
             });
           } else {
             snack('watchalready'.tr, '');
@@ -281,8 +282,15 @@ class MovieDetaleController extends GetxController {
           token: _userModel.messagingToken);
       await FirestoreService()
           .addComment(commentModel, movieId, _userModel.userId)
-          .then((value) =>
-              {_commentLoader = 0, txtControlller.clear(),commemtCount(_userModel.userId,'numberOfComments',), update()});
+          .then((value) => {
+                _commentLoader = 0,
+                txtControlller.clear(),
+                commemtCount(
+                  _userModel.userId,
+                  'numberOfComments',
+                ),
+                update()
+              });
     } else {
       txtControlller.clear();
     }
@@ -311,7 +319,8 @@ class MovieDetaleController extends GetxController {
   }
 
   // likes and dislikes on a comment
-  void likeSystem(bool isLike, String postId, String movieId, String firePostId,int count) async {
+  void likeSystem(bool isLike, String postId, String movieId, String firePostId,
+      int count) async {
     if (isLike) {
       var lst = userModel.commentLikes.split(',');
       var other = userModel.commentsDislikes.split(',');
@@ -402,7 +411,53 @@ class MovieDetaleController extends GetxController {
   }
 
   // navigate to subcomment page
-  void navToSubComment(MovieDetaleController controller, String movieId,String postId,String firePostId){
-    Get.to(()=> SubComment(movieId:movieId,mainPostId: postId,firePostId: firePostId,pastController: controller,));
+  void navToSubComment(MovieDetaleController controller, String movieId,
+      String postId, String firePostId) {
+    Get.to(() => SubComment(
+          movieId: movieId,
+          mainPostId: postId,
+          firePostId: firePostId,
+          pastController: controller,
+        ));
+  }
+
+  // call api to get images
+  void getImages(double height, double width,bool isActor,String id) async {
+    if(_loader==0){
+      ImagesModel model = ImagesModel();
+    _imagesCounter.value = 1;
+    Get.dialog(Obx(
+      () => Center(
+        child: _imagesCounter.value == 1
+            ? const CircularProgressIndicator(
+                color: orangeColor,
+              )
+            : Container(
+                child: CarouselSlider.builder(
+                options: CarouselOptions(
+                    height: height * 0.6, enlargeCenterPage: true),
+                itemCount: model.links!.length,
+                itemBuilder: (context, index, realIndex) {
+                  return ImageNetwork(
+                    link: imagebase + model.links![index],
+                    height: height * 0.95,
+                    width: width * 0.8,
+                    color: orangeColor,
+                    fit: BoxFit.contain,
+                    isMovie: true,
+                    isShadow: false,
+                  );
+                },
+              )),
+      ),
+    ));
+    ImagesService()
+        .getImages(isActor?'person': _model.isShow == true ? 'tv' : 'movie', id,
+            _userModel.language.substring(0, _userModel.language.indexOf('_')))
+        .then((val) {
+      model = val;
+      _imagesCounter.value = 0;
+    });
+    }
   }
 }

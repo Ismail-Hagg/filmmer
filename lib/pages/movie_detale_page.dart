@@ -30,7 +30,7 @@ class MovieDetalePage extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           var height = constraints.maxHeight;
           var width = constraints.maxWidth;
-          return SingleChildScrollView( 
+          return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: GetBuilder<MovieDetaleController>(
               init: Get.put(MovieDetaleController()),
@@ -41,42 +41,48 @@ class MovieDetalePage extends StatelessWidget {
                     child: Stack(children: [
                       SizedBox(
                         height: height * 0.4,
-                        child: ShapeOfView(
-                            elevation: 25,
-                            shape: ArcShape(
-                                direction: ArcDirection.Outside,
-                                height: 50,
-                                position: ArcPosition.Bottom),
-                            child: CachedNetworkImage(
-                                imageUrl: controller.model.isError != true
-                                    ? imagebase +
-                                        controller.model.posterPath.toString()
-                                    : controller.backUp.posterPath.toString(),
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.getImages(height,width,false,controller.model.id.toString());
+                          },
+                          child: ShapeOfView(
+                              elevation: 25,
+                              shape: ArcShape(
+                                  direction: ArcDirection.Outside,
+                                  height: 50,
+                                  position: ArcPosition.Bottom),
+                              child: CachedNetworkImage(
+                                  imageUrl: controller.model.isError != true
+                                      ? imagebase +
+                                          controller.model.posterPath.toString()
+                                      : controller.backUp.posterPath.toString(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ))),
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                        period: const Duration(seconds: 1),
+                                        baseColor: mainColor,
+                                        highlightColor: secondaryColor,
+                                        child: Container(
+                                          height: height * 0.4,
+                                          color: mainColor,
+                                        ),
+                                      ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                        height: height * 0.4,
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ))),
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                      period: const Duration(seconds: 1),
-                                      baseColor: mainColor,
-                                      highlightColor: secondaryColor,
-                                      child: Container(
-                                        height: height * 0.4,
-                                        color: mainColor,
-                                      ),
-                                    ),
-                                errorWidget: (context, url, error) => Container(
-                                      height: height * 0.4,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: Image.asset(
-                                                      'assets/images/no_image.png')
-                                                  .image)),
-                                    ))),
+                                                image: Image.asset(
+                                                        'assets/images/no_image.png')
+                                                    .image)),
+                                      ))),
+                        ),
                       ),
                       Positioned(
                         right: 0,
@@ -298,15 +304,15 @@ class MovieDetalePage extends StatelessWidget {
                     child: SizedBox(
                       height: height * 0.13,
                       child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           child: CustomText(
-                        text: controller.model.isError == false
-                            ? controller.model.overview.toString()
-                            : controller.backUp.overview.toString(),
-                        //controller.detales.overview,
-                        size: width * 0.036,
-                        color: whiteColor,
-                      )),
+                            text: controller.model.isError == false
+                                ? controller.model.overview.toString()
+                                : controller.backUp.overview.toString(),
+                            //controller.detales.overview,
+                            size: width * 0.036,
+                            color: whiteColor,
+                          )),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -468,13 +474,13 @@ class MovieDetalePage extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                  controller.modelComments(snapshot.data!.docs); 
+                                  controller.modelComments(snapshot.data!.docs);
                                   return Column(
                                       children: List.generate(
                                           controller.commentsList.length,
                                           (index) => Comments(
-                                            controller: controller,
-                                            showView: true,
+                                              controller: controller,
+                                              showView: true,
                                               width: width,
                                               comment: controller
                                                   .commentsList[index],
@@ -494,7 +500,7 @@ class MovieDetalePage extends StatelessWidget {
                                                       snapshot.data!.docs[index]
                                                           .id),
                                               nav: () => controller.navToSubComment(
-                                                controller,
+                                                  controller,
                                                   controller.model.id
                                                       .toString(),
                                                   controller.commentsList[index]

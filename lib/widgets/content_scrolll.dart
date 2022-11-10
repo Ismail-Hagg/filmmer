@@ -121,7 +121,13 @@ class ContentScrolling extends StatelessWidget {
                               : isMovie
                                   ? Get.find<HomeController>().navToDetale(
                                       detales!.recomendation!.results![index])
-                                  : Get.find<HomeController>().navToCast();
+                                  : Get.find<HomeController>().navToCast(
+                                      imagebase +
+                                          detales!
+                                              .cast!.cast![index].profilePath
+                                              .toString(),
+                                      detales!.cast!.cast![index].id
+                                          .toString(),Get.find<HomeController>().model.language.toString(),false);
                         },
                         child: isWaiting == null
                             ? ImageNetwork(
@@ -138,8 +144,8 @@ class ContentScrolling extends StatelessWidget {
                                 nameColor: orangeColor,
                                 charColor: whiteColor,
                                 topSpacing: height * 0.05,
-                                nameSize: pageWidth * 0.04,
-                                charSize: pageWidth * 0.027,
+                                nameSize: pageWidth * 0.033,
+                                charSize: pageWidth * 0.026,
                                 nameMax: 1,
                                 charMax: 1,
                                 flow: TextOverflow.clip,
@@ -176,7 +182,7 @@ class ContentScrolling extends StatelessWidget {
                               )
                             : isMovie == false
                                 ? CircleContainer(
-                                  fit: fit,
+                                    fit: fit,
                                     height: inHeight,
                                     width: inWidth,
                                     color: color,
@@ -191,17 +197,15 @@ class ContentScrolling extends StatelessWidget {
                                     nameColor: orangeColor,
                                     charColor: whiteColor,
                                     topSpacing: height * 0.05,
-                                    nameSize: pageWidth * 0.04,
-                                    charSize: pageWidth * 0.03,
+                                    nameSize: pageWidth * 0.03,
+                                    charSize: pageWidth * 0.02,
                                     nameMax: 1,
                                     charMax: 1,
                                     flow: TextOverflow.clip,
                                     align: TextAlign.center,
                                     weight: FontWeight.w600,
                                   )
-                                :
-                                Container()
-                                ),
+                                : Container()),
                   );
                 },
               ),
