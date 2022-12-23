@@ -159,5 +159,7 @@ class Translation extends Translations {
           'sure':'هل انت متاكد ؟',
           'delete':'حذف'
         }
+
+        // add translation fot other english speaking countries
       };
 }

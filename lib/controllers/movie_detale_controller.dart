@@ -432,23 +432,35 @@ class MovieDetaleController extends GetxController {
             ? const CircularProgressIndicator(
                 color: orangeColor,
               )
-            : Container(
-                child: CarouselSlider.builder(
-                options: CarouselOptions(
-                    height: height * 0.6, enlargeCenterPage: true),
-                itemCount: model.links!.length,
-                itemBuilder: (context, index, realIndex) {
-                  return ImageNetwork(
-                    link: imagebase + model.links![index],
-                    height: height * 0.95,
-                    width: width * 0.8,
-                    color: orangeColor,
-                    fit: BoxFit.contain,
-                    isMovie: true,
-                    isShadow: false,
-                  );
-                },
-              )),
+            : model.isError == false? CarouselSlider.builder(
+            options: CarouselOptions(
+                height: height * 0.6, enlargeCenterPage: true),
+            itemCount: model.links!.length,
+            itemBuilder: (context, index, realIndex) {
+              return ImageNetwork(
+                link: imagebase + model.links![index],
+                height: height * 0.95,
+                width: width * 0.8,
+                color: orangeColor,
+                fit: BoxFit.contain,
+                isMovie: true,
+                isShadow: false,
+              );
+            },
+              ):AlertDialog(
+                    title: Text('error'.tr),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: orangeColor,
+                        ),
+                        child: Text("answer".tr),
+                        onPressed: () async => {
+                          Get.back(),
+                        },
+                      ),
+                    ],
+                  ),
       ),
     ));
     ImagesService()
